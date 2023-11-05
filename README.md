@@ -3,7 +3,13 @@ Chandrasekhar Anisotropic Rotating Plummer.
 
 This repository allows for the computation of the diffusion coefficients and the diffusion rates of a rotating, anisotropic Plummer cluster using the orbit-averaged Chandrasekhar theory.
 
-The parametrization of velocity anisotropy follows [Dejonghe (1987)](https://ui.adsabs.harvard.edu/abs/1987MNRAS.224...13D/abstract), whereas that of rotation follows the Lynden-Bell demon from [Lynden-Bell (1960)](https://ui.adsabs.harvard.edu/abs/1960MNRAS.120..204L/abstract).
+The parametrization of velocity anisotropy follows [Dejonghe (1987)](https://ui.adsabs.harvard.edu/abs/1987MNRAS.224...13D/abstract), and is described by a parameter $q$.
+
+The parametrization rotation follows the Lynden-Bell demon from [Lynden-Bell (1960)](https://ui.adsabs.harvard.edu/abs/1960MNRAS.120..204L/abstract), and described by
+$$
+F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{\mathrm{z}}) = F_{\mathrm{tot}}(J_{\mathrm{r}},L) (1 + \alpha \mathrm{sgn}(L_{\mathrm{z}}/L)),
+$$
+where $F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{\mathrm{z}})$ is the distribution function in action space for the rotating cluster, $F_{\mathrm{tot}}(J_{\mathrm{r}},L)$ is the distribution function for the associated non-rotating cluster and $\alpha$ is the rotation parameter (between -1 and 1).
 
 ## Installation
 
@@ -42,7 +48,7 @@ As an example, `Compute_dFdt_JrL.jl` will compute a 2D map in (J_r,L) space.
 
 This script is parallelized. The full list of arguments can be found in the file `code/sources/julia/Args.jl`.
 
-Here is an example of a console command to launch the computation in (Jr,L) space for 12 threads , for a Plummer cluster with anisotropy parameter `q=0.0` and rotation parameter `alpha=0.1`.
+Here is an example of a console command to launch the computation in (Jr,L) space for 12 threads , for a Plummer cluster with anisotropy parameter `q=0.0` and rotation parameter `$alpha=0.1`.
 
 ```
 $ cd ./code/compute
