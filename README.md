@@ -1,12 +1,15 @@
 # CARP
 Chandrasekhar Anisotropic Rotating Plummer.
 
+This repository allows for the computation of the diffusion coefficients and the diffusion rates of a rotating, anisotropic Plummer cluster using the orbit-averaged Chandrasekhar theory.
+
+The parametrization of velocity anisotropy follows [Dejonghe (1987)](https://ui.adsabs.harvard.edu/abs/1987MNRAS.224...13D/abstract), whereas that of rotation follows the Lynden-Bell demon from [Lynden-Bell (1960)](https://ui.adsabs.harvard.edu/abs/1960MNRAS.120..204L/abstract).
 
 ## Installation
 
-Install Julia by following the instructions at `https://julialang.org/downloads/`.
+Install Julia by following the instructions at [julialang.org/downloads/](https://julialang.org/downloads/).
 
-To invoke Julia in the Terminal, you need to make sure that the julia command-line program is in your `PATH`. See `https://julialang.org/downloads/platform/#optional_add_julia_to_path` for detailed instructions
+To invoke Julia in the Terminal, you need to make sure that the julia command-line program is in your `PATH`. See [here](https://julialang.org/downloads/platform/#optional_add_julia_to_path) for detailed instructions.
 
 ## Packages
 
@@ -28,3 +31,24 @@ to install the following packages:
 ### !! WARNING !!
 
 **DO NOT INTERRUPT THE DOWNLOADING OF THE PACKAGES !!!!**
+
+
+## Plot a map of the diffusion rate in action space
+
+To compute a mapping of the diffusion rate dF/dt, one can use the Julia scripts located at
+`code/compute/`. These script will compute a 2D map in action space and store it in a `.hf5` file in the folder `code/data`. 
+
+As an example, `Compute_dFdt_JrL.jl` will compute a 2D map in (J_r,L) space.
+
+This script is parallelized. The full list of arguments can be found in the file `code/sources/julia/Args.jl`.
+
+Here is an example of a console command to launch the computation in (Jr,L) space for 12 threads , for a Plummer cluster with anisotropy parameter `q=0.0` and rotation parameter `alpha=0.1`.
+
+```
+$ cd ./code/compute
+$ julia -t 12 Compute_dFdt_JrL.jl --q 0.0 --a 0.1
+```
+
+
+The resulting file will be created in the folder `code/data` under the name 
+`Dump_dFdt_JrL_Map_q_0.0_a_0.1.hf5`.

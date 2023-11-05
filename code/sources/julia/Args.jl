@@ -5,10 +5,6 @@ using ArgParse
 ##################################################
 tabargs = ArgParseSettings()
 @add_arg_table! tabargs begin
-    "--parallel"
-    help = "Parallel computation: yes/no"
-    arg_type = String
-    default = "yes"
     "--nbAvr"
     help = "Number of sampling points for the radius orbit-averaging integral"
     arg_type = Int64
