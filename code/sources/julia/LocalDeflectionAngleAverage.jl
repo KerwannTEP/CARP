@@ -1,6 +1,6 @@
 
 # USED
-function localVelChange3DAngleAverageExact(r::Float64, vr::Float64,
+function localVelChange3DAngleAverage(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbw::Int64=nbw_default,
                         nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -131,7 +131,7 @@ end
 # cosI-drift coeff
 # analytical
 # w-integral becomes zeta-integral
-function localDriftCosIAngleAverageExact(r::Float64, vr::Float64,
+function localDriftCosIAngleAverage(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbzeta::Int64=nbw_default,
                         nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -166,7 +166,6 @@ function localDriftCosIAngleAverageExact(r::Float64, vr::Float64,
             drift_zeta = 0.0
 
             xwmax = -(vt-vt_v*wmax*cosvarphi+vr_v*wmax*sinvarphi*sinphi)*cosI/(wmax*sinI*abs(sinvarphi*cosphi))
-            #wmin = -vt*cosI/(vr_v*sinvarphi*sinphi*cosI-vt_v*cosvarphi*cosI-sign(cosI)*sinI*abs(sinvarphi*cosphi))
             xinf = (vt_v*cosvarphi-vr_v*sinvarphi*sinphi)*cosI/(sinI*abs(sinvarphi*cosphi))
             # x(w) must be between -1 and 1
             # wmin = w(x=-1)
@@ -201,8 +200,6 @@ function localDriftCosIAngleAverageExact(r::Float64, vr::Float64,
                 if (vanish_int == false)
                     zetamin = acos(xmax)
                     zetamax = acos(xmin)
-
-                    #println(xinf)
 
                     for izeta=1:nbzeta
                         zeta = zetamin + (zetamax-zetamin)/nbzeta*(izeta-0.5)

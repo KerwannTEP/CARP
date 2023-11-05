@@ -3,7 +3,7 @@
 ##################################################
 
 # USED
-function localOrbitChangeAngleAverageExact(r::Float64, vr::Float64, vt::Float64,
+function localOrbitChangeAngleAverage(r::Float64, vr::Float64, vt::Float64,
                         cosI::Float64, m_field::Float64, alpha::Float64=alphaRot,
                         nbw::Int64=nbw_default,
                         nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -15,7 +15,7 @@ function localOrbitChangeAngleAverageExact(r::Float64, vr::Float64, vt::Float64,
 
     sinI = sqrt(abs(1.0 - cosI^2))
 
-    dvPar, dvPar2, dvPerp2, sinSqdvPerSq = localVelChange3DAngleAverageExact(r,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+    dvPar, dvPar2, dvPerp2, sinSqdvPerSq = localVelChange3DAngleAverage(r,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
 
     dE   = 0.5*dvPar2 + 0.5*dvPerp2 + v*dvPar
     dE2  = v^2* dvPar2
@@ -41,7 +41,7 @@ end
 
 
 # USED
-function orbitAverageEnergyCoeffsOptiExact(sp::Float64, sa::Float64, cosI::Float64,
+function orbitAverageEnergyCoeffs(sp::Float64, sa::Float64, cosI::Float64,
                     m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                     nbw::Int64=nbw_default,
                     nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -77,7 +77,7 @@ function orbitAverageEnergyCoeffsOptiExact(sp::Float64, sa::Float64, cosI::Float
         halfperiod += jac_loc
 
 
-        dE, dL, dLz, dE2, dL2, dLz2, dEdL, dEdLz, dLdLz = localOrbitChangeAngleAverageExact(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+        dE, dL, dLz, dE2, dL2, dLz2, dEdL, dEdLz, dLdLz = localOrbitChangeAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
 
         avrDE += jac_loc*dE
         avrDL += jac_loc*dL
@@ -111,7 +111,7 @@ end
 
 
 # USED
-function orbitAverageDriftCosIOptiExact(sp::Float64, sa::Float64, cosI::Float64,
+function orbitAverageDriftCosI(sp::Float64, sa::Float64, cosI::Float64,
                     m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                     nbw::Int64=nbw_default,
                     nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -141,7 +141,7 @@ function orbitAverageDriftCosIOptiExact(sp::Float64, sa::Float64, cosI::Float64,
 
 
 
-        driftloc = localDriftCosIAngleAverageExact(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+        driftloc = localDriftCosIAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
 
         drift += jac_loc*driftloc
 
@@ -164,7 +164,7 @@ end
 
 
 # USED
-function orbitAverageActionCoeffsOptiExact(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
+function orbitAverageActionCoeffs(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
                                 nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -179,7 +179,7 @@ function orbitAverageActionCoeffsOptiExact(Jr::Float64, L::Float64, cosI::Float6
     end
     sma, ecc = sma_ecc_from_sp_sa(sp,sa)
 
-    avrDE, avrDL, avrDLz, avrDEE, avrDLL, avrDLzLz, avrDEL, avrDELz, avrDLLz = orbitAverageEnergyCoeffsOptiExact(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
+    avrDE, avrDL, avrDLz, avrDEE, avrDLL, avrDLzLz, avrDEL, avrDELz, avrDLLz = orbitAverageEnergyCoeffs(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
 
     dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2 = grad_Jr_E_L(E,L,nbu)
 
@@ -194,7 +194,7 @@ end
 
 
 # USED
-function FluxCosIOptiExact(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
+function FluxCosI(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
                                 nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -210,7 +210,7 @@ function FluxCosIOptiExact(Jr::Float64, L::Float64, cosI::Float64, m_field::Floa
     sma, ecc = sma_ecc_from_sp_sa(sp,sa)
 
 
-    drift = orbitAverageDriftCosIOptiExact(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
+    drift = orbitAverageDriftCosI(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
 
     Frot = _Frot_cosI(E,L,cosI,alpha)
 
@@ -224,14 +224,14 @@ end
 #####################################################################
 
 # ok
-function orbitAverageActionCoeffs_cosI_OptiExact(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
+function orbitAverageActionCoeffs_cosI(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
                                 nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
                                  nbu::Int64=nbu0, m_test::Float64=m_field)
 
 
-    avrDJr, avrDL, avrDLz, avrDJrJr, avrDLL, avrDLzLz, avrDJrL, avrDJrLz, avrDLLz = orbitAverageActionCoeffsOptiExact(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    avrDJr, avrDL, avrDLz, avrDJrJr, avrDLL, avrDLzLz, avrDJrL, avrDJrLz, avrDLLz = orbitAverageActionCoeffs(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
 
     avrDI = -cosI/L*avrDL + 1.0/L*avrDLz + cosI/L^2*avrDLL- 1.0/L^2*avrDLLz
     avrDJrI = -cosI/L*avrDJrL + 1.0/L*avrDJrLz
