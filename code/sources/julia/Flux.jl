@@ -478,7 +478,7 @@ end
 
 
 
-
+# USED
 function fluxOptiExactSign_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
@@ -577,6 +577,7 @@ function dFdtOptiExactSign_2D_JrL(Jr::Float64, L::Float64, m_field::Float64,
     return -(sumJr+sumL)
 end
 
+# USED
 function dFdtOptiExactSign_2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbL::Int64=50, Lmax::Float64=3.0, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,

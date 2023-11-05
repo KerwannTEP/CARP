@@ -1,4 +1,3 @@
-
 function alpha_beta_from_E_L(E::Float64, L::Float64, nbu::Int64 = nbu0)
     sp, sa = sp_sa_from_E_L(E,L)
     rp, ra = rp_ra_from_sp_sa(sp,sa)

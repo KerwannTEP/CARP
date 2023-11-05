@@ -158,6 +158,7 @@ function localOrbitChangeAngleAverageExact(r::Float64, vr::Float64, vt::Float64,
     return dE, dL, dLz, dE2, dL2, dLz2, dEdL, dEdLz, dLdLz
 end
 
+# USED
 function localOrbitChangeAngleAverageExact_nbKseparate(r::Float64, vr::Float64, vt::Float64,
                         cosI::Float64, m_field::Float64, alpha::Float64=alphaRot,
                         nbw::Int64=nbw_default,
@@ -483,7 +484,7 @@ function orbitAverageEnergyCoeffsOptiExact_spsa(sp::Float64, sa::Float64, cosI::
     return avrDE, avrDL, avrDLz, avrDEE, avrDLL, avrDLzLz, avrDEL, avrDELz, avrDLLz
 end
 
-
+# USED
 function orbitAverageEnergyCoeffsOptiExact_spsa_nbKseparate(sp::Float64, sa::Float64, cosI::Float64,
                     m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                     nbw::Int64=nbw_default,
@@ -623,7 +624,7 @@ function orbitAverageEnergyCoeffsOpti_spsa_nbKseparate(sp::Float64, sa::Float64,
     return avrDE, avrDL, avrDLz, avrDEE, avrDLL, avrDLzLz, avrDEL, avrDELz, avrDLLz
 end
 
-
+# USED
 function orbitAverageDriftCosIOptiExact_spsa_nbKseparate(sp::Float64, sa::Float64, cosI::Float64,
                     m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                     nbw::Int64=nbw_default,
@@ -671,75 +672,6 @@ function orbitAverageDriftCosIOptiExact_spsa_nbKseparate(sp::Float64, sa::Float6
 end
 
 
-
-function orbitAverageEnergyCoeffsOptiExactPar_spsa(sp::Float64, sa::Float64, cosI::Float64,
-                    m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
-                    nbK::Int64=nbK_default, m_test::Float64=m_field)
-
-    avrDE = Threads.Atomic{Float64}(0.0)
-    avrDL = Threads.Atomic{Float64}(0.0)
-    avrDEE = Threads.Atomic{Float64}(0.0)
-    avrDEL = Threads.Atomic{Float64}(0.0)
-    avrDLL = Threads.Atomic{Float64}(0.0)
-    avrDLz = Threads.Atomic{Float64}(0.0)
-    avrDLzLz = Threads.Atomic{Float64}(0.0)
-    avrDLLz = Threads.Atomic{Float64}(0.0)
-    avrDELz = Threads.Atomic{Float64}(0.0)
-
-    halfperiod = Threads.Atomic{Float64}(0.0)
-
-    E, L = E_L_from_sp_sa(sp,sa)
-
-
-    sma, ecc = sma_ecc_from_sp_sa(sp,sa)
-
-
-    Threads.@threads for iu=1:nbAvr
-        uloc = -1+2*(iu-0.5)/nbAvr
-        sloc = s_from_u_sma_ecc(uloc,sma,ecc)
-        rloc = r_from_s(sloc)
-        jac_loc = Theta(uloc,sp,sa)
-
-        vr = sqrt(2.0*abs(E - psiEff(rloc,L)))
-        vt = L/rloc
-
-        #halfperiod += jac_loc
-
-
-
-
-        dE, dL, dLz, dE2, dL2, dLz2, dEdL, dEdLz, dLdLz = localOrbitChangeAngleAverageExact(rloc,vr,vt,cosI,m_field,alpha,nbK,m_test)
-
-        Threads.atomic_add!(avrDE,jac_loc*dE)
-        Threads.atomic_add!(avrDL,jac_loc*dL)
-        Threads.atomic_add!(avrDEE,jac_loc*dE2)
-        Threads.atomic_add!(avrDEL,jac_loc*dEdL)
-        Threads.atomic_add!(avrDLL,jac_loc*dL2)
-        Threads.atomic_add!(avrDLz,jac_loc*dLz)
-        Threads.atomic_add!(avrDLzLz,jac_loc*dLz2)
-        Threads.atomic_add!(avrDLLz,jac_loc*dLdLz)
-        Threads.atomic_add!(avrDELz,jac_loc*dEdLz)
-
-        Threads.atomic_add!(halfperiod,jac_loc)
-
-
-
-
-
-    end
-    avrDE[] /= halfperiod[]
-    avrDL[] /= halfperiod[]
-    avrDEE[] /= halfperiod[]
-    avrDEL[] /= halfperiod[]
-    avrDLL[] /= halfperiod[]
-    avrDLz[] /= halfperiod[]
-    avrDLzLz[] /= halfperiod[]
-    avrDLLz[] /= halfperiod[]
-    avrDELz[] /= halfperiod[]
-
-
-    return avrDE[], avrDL[], avrDLz[], avrDEE[], avrDLL[], avrDLzLz[], avrDEL[], avrDELz[], avrDLLz[]
-end
 
 
 # No rotation: only integral over "radius"
@@ -1213,7 +1145,7 @@ function orbitAverageActionCoeffsOptiExact(Jr::Float64, L::Float64, cosI::Float6
     return avrDJr, avrDL, avrDLz, avrDJrJr, avrDLL, avrDLzLz, avrDJrL, avrDJrLz, avrDLLz
 end
 
-
+# USED
 function orbitAverageActionCoeffsOptiExact_nbKseparate(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
@@ -1297,7 +1229,7 @@ end
 
 
 
-
+# USED
 function FluxCosIOptiExact_nbKseparate(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
