@@ -1,6 +1,8 @@
 # CARP
 Chandrasekhar Anisotropic Rotating Plummer.
 
+## Aim of the code
+
 This repository allows for the computation of the diffusion coefficients and the diffusion rates of a rotating, anisotropic Plummer cluster using the orbit-averaged Chandrasekhar theory.
 
 The parametrization of velocity anisotropy follows [Dejonghe (1987)](https://ui.adsabs.harvard.edu/abs/1987MNRAS.224...13D/abstract), and is described by a parameter $q$.
@@ -63,4 +65,18 @@ The resulting file will be created in the folder `code/data` under the name
 
 ## Plotting the diffusion rate in action space
 
-Section in construction.
+After having sampled a 2D-slice of the action space, one may plot the data using the Julia scripts located at `code/compute/`.
+
+As an example, `PlotContour_JrL.jl` will compute a 2D map in $(J_{\mathrm{r}},L)$ space for the data of the cluster $(q,\alpha)=(0.0,0.1)$ when typing the follow command in the console
+
+```
+$ cd ./code/compute
+$ julia PlotContour_JrL.jl --q 0.0 --a 0.1
+```
+
+The resulting file will be created in the folder `code/graphs` under the name 
+`Map_dFdt_JrL_q_0.0_a_0.1.png`.
+
+
+![`dF/dt (Jr,L)` for `q=0` and `$alpha=0.1`]("../graphs/Map_dFdt_JrCosI_q_0.0_a_0.1.png)
+
