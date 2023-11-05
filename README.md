@@ -7,9 +7,9 @@ The parametrization of velocity anisotropy follows [Dejonghe (1987)](https://ui.
 
 The parametrization rotation follows the Lynden-Bell demon from [Lynden-Bell (1960)](https://ui.adsabs.harvard.edu/abs/1960MNRAS.120..204L/abstract), and described by
 
-$$F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{\mathrm{z}}) = F_{\mathrm{tot}}(J_{\mathrm{r}},L) \big(1 + \alpha \mathrm{sgn}[L_{\mathrm{z}}/L] \big),$$
+$$F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z}) = F_{\mathrm{tot}}(J_{\mathrm{r}},L) \big(1 + \alpha \, \mathrm{sgn}[L_{\mathrm{z}}/L] \big),$$
 
-where $F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{\mathrm{z}})$ is the distribution function in action space for the rotating cluster, $F_{\mathrm{tot}}(J_{\mathrm{r}},L)$ is the distribution function for the associated non-rotating cluster and $\alpha$ is the rotation parameter (between -1 and 1).
+where $F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z})$ is the distribution function in action space for the rotating cluster, $F_{\mathrm{tot}}(J_{\mathrm{r}},L)$ is the distribution function for the associated non-rotating cluster and $\alpha$ is the rotation parameter (between -1 and 1).
 
 ## Installation
 
@@ -41,14 +41,14 @@ to install the following packages:
 
 ## Plot a map of the diffusion rate in action space
 
-To compute a mapping of the diffusion rate dF/dt, one can use the Julia scripts located at
+To compute a mapping of the diffusion rate $\partial F/\partial t$, one can use the Julia scripts located at
 `code/compute/`. These script will compute a 2D map in action space and store it in a `.hf5` file in the folder `code/data`. 
 
-As an example, `Compute_dFdt_JrL.jl` will compute a 2D map in (J_r,L) space.
+As an example, `Compute_dFdt_JrL.jl` will compute a 2D map in $(J_{\mathrm{r}},L)$ space.
 
 This script is parallelized. The full list of arguments can be found in the file `code/sources/julia/Args.jl`.
 
-Here is an example of a console command to launch the computation in (Jr,L) space for 12 threads , for a Plummer cluster with anisotropy parameter `q=0.0` and rotation parameter `$alpha=0.1`.
+Here is an example of a console command to launch the computation in $(J_{\mathrm{r}},L)$ space for 12 threads , for a Plummer cluster with anisotropy parameter $q=0.0$ and rotation parameter $\alpha=0.1$.
 
 ```
 $ cd ./code/compute
