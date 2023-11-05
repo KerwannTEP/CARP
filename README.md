@@ -11,6 +11,8 @@ $$F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z}) = F_{\mathrm{tot}}(J_{\mathrm{r}},L) 
 
 where $F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z})$ is the distribution function in action space for the rotating cluster, $F_{\mathrm{tot}}(J_{\mathrm{r}},L)$ is the distribution function for the associated non-rotating cluster and $\alpha$ is the rotation parameter (between -1 and 1).
 
+This repository makes use of the Julia Language  (see [Bezanson et al. (2017)](https://doi.org/10.1137/141000671)), whose repository is located at [JuliaLang](https://github.com/JuliaLang/julia/tree/master).
+
 ## Installation
 
 Install Julia by following the instructions at [julialang.org/downloads/](https://julialang.org/downloads/).
@@ -39,7 +41,7 @@ to install the following packages:
 **DO NOT INTERRUPT THE DOWNLOADING OF THE PACKAGES !!!!**
 
 
-## Plot a map of the diffusion rate in action space
+## Sampling the diffusion rate in action space
 
 To compute a mapping of the diffusion rate $\partial F/\partial t$, one can use the Julia scripts located at
 `code/compute/`. These script will compute a 2D map in action space and store it in a `.hf5` file in the folder `code/data`. 
