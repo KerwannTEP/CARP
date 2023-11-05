@@ -43,6 +43,8 @@ end
 
 function tabdFdt!()
 
+    println("Nb Threads = ",Threads.nthreads())
+
     Threads.@threads for iGrid=1:nbJrLGrid
         LMeasure, JrMeasure = tabLJrGrid[1,iGrid], tabLJrGrid[2,iGrid]
         dfdt = dFdtOptiExactSign_2D_JrL(JrMeasure,LMeasure,m_field,alphaRot,nbCosI,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)

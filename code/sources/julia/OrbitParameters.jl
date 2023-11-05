@@ -240,12 +240,3 @@ end
 function r_from_xi(xi::Float64)
     return _b * sqrt((1.0 + xi)/(1.0 - xi))
 end
-
-##########################################
-# Hessian of radial action
-##########################################
-
-function hessian(E::Float64, L::Float64, nbu::Int64 = nbu0)
-    dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2 = grad_Jr_E_L_Wrap(E,L,nbu)
-    return d2JrdE2 * d2JrdL2 - (d2JrdEL)^2
-end

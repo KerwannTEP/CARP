@@ -590,6 +590,8 @@ function dFdtOptiExactSign_2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float6
     for i=1:nbL
         L = Lmax/nbL*(i-0.5)
 
+        
+
         fJr_p, _ = fluxOptiExactSign_JrL(Jr+eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
         fJr_m, _ = fluxOptiExactSign_JrL(Jr-eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
 
@@ -604,6 +606,7 @@ function dFdtOptiExactSign_2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float6
         sumJr += dJr
         sumcosI  += dcosI
     end
+
 
     sumJr *= Lmax/nbL
     sumcosI *= Lmax/nbL

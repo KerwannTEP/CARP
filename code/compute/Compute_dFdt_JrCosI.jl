@@ -3,18 +3,18 @@ include("../sources/julia/Main.jl")
 using HDF5
 
 const JrminMeasure, JrmaxMeasure = _L0*0.02, _L0*0.5 # Jr range
-const nbJrMeasure = 25#50 # Number of Jr sampling points
+const nbJrMeasure = 25 # Number of Jr sampling points
 
 const epsRef = 0.01
 
-const nbL = 50
+const nbL = 5 #50
 const Lmax = 3.0
 
 
 # cosI-sampling for cos I>0
 const cosIminPos = 0.02
 const cosImaxPos = 0.98
-const nbcosIPos = 20#25
+const nbcosIPos = 20
 
 const tabcosIPos = [cosIminPos + (cosImaxPos-cosIminPos)*(i-0)/nbcosIPos for i=1:nbcosIPos]
 const tabFluxIPos = zeros(Float64,nbcosIPos)
@@ -23,7 +23,7 @@ const tabFluxIPos = zeros(Float64,nbcosIPos)
 # cosI-sampling for cos I<0
 const cosIminNeg = -0.98
 const cosImaxNeg = -0.02
-const nbcosINeg = 20#25
+const nbcosINeg = 20
 
 const tabcosINeg = [cosIminNeg + (cosImaxNeg-cosIminNeg)*(i-1)/nbcosINeg for i=1:nbcosINeg]
 
@@ -64,11 +64,21 @@ end
 
 function tabdFdt!()
 
-    Threads.@threads for iGrid=1:nbJrCosIGrid
-        CosIMeasure, JrMeasure = tabCosIJrGrid[1,iGrid], tabCosIJrGrid[2,iGrid]
-        dfdt = dFdtOptiExactSign_2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
+    println("Nb Threads = ",Threads.nthreads())
 
-        tabdFdt[iGrid] = dfdt
+    @sync begin
+        for iGrid=1:nbJrCosIGrid
+            Threads.@spawn begin
+
+
+                
+
+                CosIMeasure, JrMeasure = tabCosIJrGrid[1,iGrid], tabCosIJrGrid[2,iGrid]
+                dfdt = dFdtOptiExactSign_2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
+
+                tabdFdt[iGrid] = dfdt
+            end
+        end
     end
 
 end

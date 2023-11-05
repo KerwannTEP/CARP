@@ -64,6 +64,8 @@ end
 
 function tabdFdt!()
 
+    println("Nb Threads = ",Threads.nthreads())
+
     Threads.@threads for iGrid=1:nbLCosIGrid
         CosIMeasure, LMeasure = tabCosILGrid[1,iGrid], tabCosILGrid[2,iGrid]
         dfdt = dFdtOptiExactSign_2D_LcosI(LMeasure,CosIMeasure,m_field,alphaRot,nbJr,Jrmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
