@@ -214,12 +214,12 @@ function E_L_from_alpha_beta(alpha::Float64, beta::Float64, nbu::Int64 = nbu0,
     alphac = alpha_circ(beta)
 
     if (alpha == alphac)
-        return E_L_Circ(beta)
+        return E_L_from_beta_Circ(beta)
     else
         if (beta == 0.5)
-            return E_L_Radial(alpha)
+            return E_L_from_alpha_beta_Radial(alpha)
         else
-            return E_L_Arbitrary(alpha,beta,alphac,nbu,eps,nbStepMax)
+            return E_L_from_alpha_beta(alpha,beta,alphac,nbu,eps,nbStepMax)
         end
     end
 end

@@ -1,12 +1,15 @@
+##########################################################
+# Compute orbital parameters E and L from frequency parameters alpha and beta
+##########################################################
 
+# This tests if an orbit is near-circular
 function test_near_circular(alpha::Float64, alphac::Float64, sc::Float64)
     d2JrdE2_circ = -(3.0*sc^(7/2)*(-5.0+35.0*sc^2+16.0*sc^4+2.0*sc^6))/(2.0*_Omega0*_E0*(3.0+sc^2)^(7/2))
     dE = (alpha-alphac)/(_Omegam*alphac^2*d2JrdE2_circ)
-    #println(dE)
     return abs(dE/_E0) < 10^(-10)
 end
 
-
+# This computes the next step in E and L in the Newton inversion
 function step_E_L(E::Float64, L::Float64, alpha::Float64, alpha_guess::Float64,
                 beta::Float64, beta_guess::Float64)
 
@@ -19,8 +22,6 @@ function step_E_L(E::Float64, L::Float64, alpha::Float64, alpha_guess::Float64,
 
     detJac = dalphadE*dbetadL-dbetadE*dalphadL
 
-    #println(detJac)
-
     dAlpha = alpha-alpha_guess
     dBeta = beta-beta_guess
 
@@ -31,36 +32,29 @@ function step_E_L(E::Float64, L::Float64, alpha::Float64, alpha_guess::Float64,
 end
 
 
-
+# This computes the next values of E and L in any position in (E,L) space
 function next_E_L(E::Float64, L::Float64, stepE::Float64, stepL::Float64)
     if (E+stepE >= 0.0)
         E = E/2.0
-        #println("a")
     elseif (E+stepE <= _E0)
         E = (E+_E0)/2.0
-        #println("b")
     else
         E = E + stepE
-        #println("c")
     end
 
 
     if (L+stepL > _Lc(E))
         L = (L+_Lc(E))/2.0
-        #println("d")
     elseif (L+stepL <= 0.0)
         L = L/2.0
-        #println("e")
     else
         L = L + stepL
-        #println("f")
     end
     return E, L
 end
 
-
-
-function E_L_Radial(alpha::Float64)
+# This computes E and L from alpha for a radial orbit
+function E_L_from_alpha_beta_Radial(alpha::Float64)
     # L=0.0
     # bissection on alpha_beta_from_E_L_Wrap(E,0.0)
     # bisection(fun, xl, xu)
@@ -70,7 +64,7 @@ function E_L_Radial(alpha::Float64)
     while (alpha_beta_from_E_L_Wrap(Emax,L)[1] > alpha)
         Emax /= 2.0
     end
-    #println((Emin,Emax))
+
     E = bisection(E->alpha_beta_from_E_L_Wrap(E,L)[1]-alpha, Emin, Emax)
 
     alpha_guess, beta_guess = alpha_beta_from_E_L_Wrap(E,L)
@@ -78,15 +72,16 @@ function E_L_Radial(alpha::Float64)
     return E, L, alpha-alpha_guess, 0.0, 1
 end
 
-function E_L_Circ(beta::Float64)
+# This computes E and L from alpha for a circular orbit
+function E_L_from_beta_Circ(beta::Float64)
     sc = beta*sqrt(3.0)/sqrt(1.0-beta^2)
     rp, ra = rp_ra_from_sp_sa(sc,sc)
     E, L = E_L_from_rp_ra(rp,ra)
     return E, L, 0.0, 0.0, 1
 end
 
-# (E,L) from (alpha,beta)
-function E_L_Arbitrary(alpha::Float64, beta::Float64, alphac::Float64,
+# This computes (E,L) from (alpha,beta)
+function E_L_from_alpha_beta(alpha::Float64, beta::Float64, alphac::Float64,
             nbu::Int64 = 300, eps::Float64=4.0*10^(-10), nbStepMax::Int64=10)
 
     # initial guess (E, L)
@@ -116,8 +111,6 @@ function E_L_Arbitrary(alpha::Float64, beta::Float64, alphac::Float64,
 
             alpha_guess, beta_guess = alpha_beta_from_E_L_Wrap(E,L,nbu)
             nbStep += 1
-
-            #println((stepE, stepL,E,L))
 
             if (nbStep > nbStepMax || (abs(stepE)<abs(_E0*eps) && abs(stepL)<abs(_L0*eps)) )
                 break
