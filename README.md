@@ -50,7 +50,7 @@ As an example, `Compute_dFdt_JrL.jl` will compute a 2D map in $(J_{\mathrm{r}},L
 
 This script is parallelized. The full list of arguments can be found in the file `code/sources/julia/Args.jl`.
 
-Here is an example of a console command to launch the computation in $(J_{\mathrm{r}},L)$ space for 12 threads , for a Plummer cluster with anisotropy parameter $q=0.0$ and rotation parameter $\alpha=0.1$.
+Here is an example of a console command to launch the computation in $(J_{\mathrm{r}},L)$ space for 12 threads, for a Plummer cluster with anisotropy parameter $q=0.0$ and rotation parameter $\alpha=0.1$.
 
 ```
 $ cd ./code/compute
@@ -60,3 +60,7 @@ $ julia -t 12 Compute_dFdt_JrL.jl --q 0.0 --a 0.1
 
 The resulting file will be created in the folder `code/data` under the name 
 `Dump_dFdt_JrL_Map_q_0.0_a_0.1.hf5`.
+
+## Plotting the diffusion rate in action space
+
+Section in construction.

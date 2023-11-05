@@ -79,8 +79,6 @@ function sp_sa_from_E_L(E::Float64, L::Float64)
     tE = E/_E0
     tL = L/_L0
 
-#    println((E,L))
-
     if (tE >= 0.0) # bound orbits
         sc = _sc(tE)
         if (L >= _Lc(E)) # circular orbit (inequality to take care of small Float errors)
@@ -214,7 +212,6 @@ function E_L_from_alpha_beta(alpha::Float64, beta::Float64, nbu::Int64 = nbu0,
             eps::Float64=4.0*10^(-10), nbStepMax::Int64=10)
 
     alphac = alpha_circ(beta)
-    #println((alphac,beta))
 
     if (alpha == alphac)
         return E_L_Circ(beta)
