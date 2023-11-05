@@ -56,18 +56,18 @@ end
 # This computes E and L from alpha for a radial orbit
 function E_L_from_alpha_beta_Radial(alpha::Float64)
     # L=0.0
-    # bissection on alpha_beta_from_E_L_Wrap(E,0.0)
+    # bissection on alpha_beta_from_E_L(E,0.0)
     # bisection(fun, xl, xu)
     L = 0.0
     Emin = -1.0 # alpha=1.0
     Emax = -1.0
-    while (alpha_beta_from_E_L_Wrap(Emax,L)[1] > alpha)
+    while (alpha_beta_from_E_L(Emax,L)[1] > alpha)
         Emax /= 2.0
     end
 
-    E = bisection(E->alpha_beta_from_E_L_Wrap(E,L)[1]-alpha, Emin, Emax)
+    E = bisection(E->alpha_beta_from_E_L(E,L)[1]-alpha, Emin, Emax)
 
-    alpha_guess, beta_guess = alpha_beta_from_E_L_Wrap(E,L)
+    alpha_guess, beta_guess = alpha_beta_from_E_L(E,L)
 
     return E, L, alpha-alpha_guess, 0.0, 1
 end
@@ -81,7 +81,7 @@ function E_L_from_beta_Circ(beta::Float64)
 end
 
 # This computes (E,L) from (alpha,beta)
-function E_L_from_alpha_beta(alpha::Float64, beta::Float64, alphac::Float64,
+function E_L_from_alpha_beta_Arbitrary(alpha::Float64, beta::Float64, alphac::Float64,
             nbu::Int64 = 300, eps::Float64=4.0*10^(-10), nbStepMax::Int64=10)
 
     # initial guess (E, L)
@@ -109,7 +109,7 @@ function E_L_from_alpha_beta(alpha::Float64, beta::Float64, alphac::Float64,
             stepE, stepL = step_E_L(E,L,alpha,alpha_guess,beta,beta_guess)
             E, L = next_E_L(E,L,stepE,stepL)
 
-            alpha_guess, beta_guess = alpha_beta_from_E_L_Wrap(E,L,nbu)
+            alpha_guess, beta_guess = alpha_beta_from_E_L(E,L,nbu)
             nbStep += 1
 
             if (nbStep > nbStepMax || (abs(stepE)<abs(_E0*eps) && abs(stepL)<abs(_L0*eps)) )

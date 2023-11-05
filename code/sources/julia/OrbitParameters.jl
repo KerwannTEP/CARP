@@ -195,14 +195,14 @@ end
 ##########################################
 ##########################################
 
-function alpha_beta_from_E_L_Wrap(E::Float64, L::Float64, nbu::Int64 = 300, eps::Float64=10^(-5), Lcutoff::Float64=0.00005)
+function alpha_beta_from_E_L(E::Float64, L::Float64, nbu::Int64 = 300, eps::Float64=10^(-5), Lcutoff::Float64=0.00005)
     sp, sa = sp_sa_from_E_L(E,L)
     rp, ra = rp_ra_from_sp_sa(sp,sa)
     if (L >= 0.05)
-        return alpha_beta_from_rp_ra(rp,ra,nbu)
+        return alpha_beta_from_rp_ra_Linear(rp,ra,nbu)
 
     else
-        alpha, _ = alpha_beta_from_rp_ra(rp,ra,nbu)
+        alpha, _ = alpha_beta_from_rp_ra_Linear(rp,ra,nbu)
         beta = beta_from_rp_ra_logIntegral(rp,ra,nbu,eps,Lcutoff)
         return alpha, beta
     end
@@ -219,7 +219,7 @@ function E_L_from_alpha_beta(alpha::Float64, beta::Float64, nbu::Int64 = nbu0,
         if (beta == 0.5)
             return E_L_from_alpha_beta_Radial(alpha)
         else
-            return E_L_from_alpha_beta(alpha,beta,alphac,nbu,eps,nbStepMax)
+            return E_L_from_alpha_beta_Arbitrary(alpha,beta,alphac,nbu,eps,nbStepMax)
         end
     end
 end

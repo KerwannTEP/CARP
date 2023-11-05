@@ -1,10 +1,6 @@
-function alpha_beta_from_E_L(E::Float64, L::Float64, nbu::Int64 = nbu0)
-    sp, sa = sp_sa_from_E_L(E,L)
-    rp, ra = rp_ra_from_sp_sa(sp,sa)
-    return alpha_beta_from_rp_ra(rp,ra,nbu)
-end
-
-function alpha_beta_from_rp_ra(rp::Float64, ra::Float64, nbu::Int64 = nbu0)
+# Compute (alpha,beta) from (rp,ra) linearly in u-anomaly
+# Should be used for orbits not too radial
+function alpha_beta_from_rp_ra_Linear(rp::Float64, ra::Float64, nbu::Int64 = nbu0)
     E, L = E_L_from_rp_ra(rp,ra)
     sp, sa = sp_sa_from_rp_ra(rp,ra)
     sma, ecc = sma_ecc_from_sp_sa(sp,sa)
@@ -32,13 +28,11 @@ function alpha_beta_from_rp_ra(rp::Float64, ra::Float64, nbu::Int64 = nbu0)
 
 end
 
-function beta_from_E_L_logIntegral(E::Float64, L::Float64, nbv::Int64 = nbu0, eps::Float64=10^(-5),
-            Lcutoff::Float64=0.00005)
-    sp, sa = sp_sa_from_E_L(E,L)
-    rp, ra = rp_ra_from_sp_sa(sp,sa)
-    return beta_from_rp_ra_logIntegral(rp,ra,nbv,eps,Lcutoff)
-end
-
+# Compute (alpha,beta) from (rp,ra) by sampling semi-logarithmically.
+# Integral is done in two part: 
+# - near pericentre (log u-sampling)
+# - away from pericentre (linear u-sampling)
+# This should be done for orbits which are nearly radial
 function beta_from_rp_ra_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps::Float64=10^(-5),
             Lcutoff::Float64=0.00005)
     E, L = E_L_from_rp_ra(rp,ra)

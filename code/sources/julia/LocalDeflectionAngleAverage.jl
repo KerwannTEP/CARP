@@ -1,5 +1,6 @@
 
-# USED
+# Computes the local velocity deflection coefficients
+# Averaged over the orbital plane angle variable theta
 function localVelChange3DAngleAverage(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbw::Int64=nbw_default,
@@ -126,8 +127,6 @@ function localVelChange3DAngleAverage(r::Float64, vr::Float64,
 end
 
 
-
-# USED
 # cosI-drift coeff
 # analytical
 # w-integral becomes zeta-integral

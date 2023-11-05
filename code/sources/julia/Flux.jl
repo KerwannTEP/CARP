@@ -1,5 +1,5 @@
 
-# OK
+# Computes the 3D flux in (Jr,L,Lz) space
 function flux3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default, nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default, 
@@ -83,7 +83,7 @@ function flux3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
 end
 
 
-# USED
+# Computes the 2D flux in (Jr,L) space
 function flux2D_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
@@ -149,7 +149,7 @@ function flux2D_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
     return fluxJr, fluxL
 end
 
-# USED
+# Computes the 2D-diffusion rate dF/dt in (Jr,L) space
 function dFdt2D_JrL(Jr::Float64, L::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbCosI::Int64=50, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
@@ -182,7 +182,7 @@ function dFdt2D_JrL(Jr::Float64, L::Float64, m_field::Float64,
     return -(sumJr+sumL)
 end
 
-# USED
+# Computes the 2D-diffusion rate dF/dt in (Jr,cos I) space
 function dFdt2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbL::Int64=50, Lmax::Float64=3.0, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
@@ -219,7 +219,7 @@ function dFdt2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float64,
     return -(sumJr+sumcosI)
 end
 
-# USED
+# Computes the 2D-diffusion rate dF/dt in (L,cos I) space
 function dFdt2D_LcosI(L::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbJr::Int64=50, Jrmax::Float64=3.0, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
@@ -253,10 +253,78 @@ function dFdt2D_LcosI(L::Float64, cosI::Float64, m_field::Float64,
     return -(sumL+sumcosI)
 end
 
+
+# Drift (orbit-averaged) in cos I space
+function orbitAverageDriftCosI(sp::Float64, sa::Float64, cosI::Float64,
+    m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
+    nbw::Int64=nbw_default,
+    nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+    m_test::Float64=m_field)
+
+drift = 0.0
+
+halfperiod = 0.0
+
+E, L = E_L_from_sp_sa(sp,sa)
+
+
+sma, ecc = sma_ecc_from_sp_sa(sp,sa)
+
+
+for iu=1:nbAvr
+uloc = -1+2*(iu-0.5)/nbAvr
+sloc = s_from_u_sma_ecc(uloc,sma,ecc)
+rloc = r_from_s(sloc)
+jac_loc = Theta(uloc,sp,sa)
+
+vr = sqrt(2.0*abs(E - psiEff(rloc,L)))
+vt = L/rloc
+
+halfperiod += jac_loc
+
+driftloc = localDriftCosIAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+
+drift += jac_loc*driftloc
+
+end
+drift /= halfperiod
+
+
+return drift
+end
+
+
+
+# Computes the 1D-flux in cos I space.
+function FluxCosI(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
+    alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
+    nbw::Int64=nbw_default,
+    nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+    nbu::Int64=nbu0, m_test::Float64=m_field)
+
+E = E_from_Jr_L(Jr,L,nbu)
+if (Jr > 0.0)
+sp, sa = sp_sa_from_E_L(E,L)
+else
+sc = _sc(E/_E0)
+sp, sa = sc, sc
+end
+sma, ecc = sma_ecc_from_sp_sa(sp,sa)
+
+
+drift = orbitAverageDriftCosI(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
+
+Frot = _Frot_cosI(E,L,cosI,alpha)
+
+return drift*Frot
+end
+
+
+
 ###########################################################
 ###########################################################
 
-
+# Computes the 3D-diffusion rate dF/dt in (Jr,L,Lz) space
 function dFdt3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default, nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
