@@ -1,4 +1,3 @@
-
 ##########################################
 # Orbit-average functions
 ##########################################
@@ -28,25 +27,6 @@ end
 # Gradients
 ##########################################
 
-function _djacdspOld(u::Float64, sp::Float64, sa::Float64)
-
-    num = (3 *(4 *sp^3 *(-1 + u)^2 *(12 - 3 *u^2 + 2 *u^3 + u^4) +
-           sa *sp^2 *(108 - 120 *u - 27 *u^2 + 40 *u^3 + 18 *u^4 - 3 *u^6 +
-           3 *sp^2 *(-1 + u)^4 *(2 + u)^2) -
-           2 *sa^2 *sp *(-6 - 3 *u + u^3) *(6 - 3 *u + u^3 +
-           sp^2 *(2 - 3 *u + u^3)) -
-           sa^3 *(-2 + u) *(1 + u)^2 *(6 + 3* u - u^3 + sp^2 *(6 - 3 *u + u^3))))
-
-    den = (8 *sqrt(2)* sp *(sa +
-           sp) *sqrt(-(((-4 + u^2) *(sa^2 *sp *(-2 + u) *(1 + u)^2 -
-           sp *(6 - 3 *u + u^3) +
-           sa *(-6 - 3 *u + u^3 - sp^2 *(2 - 3* u + u^3))))/(
-           sa *sp *(sa + sp) *(sa *(-2 + u) *(1 + u)^2 -
-           sp *(2 - 3 *u + u^3)))))* (sa^2* sp *(2 + 3 *u - u^3) +
-           sp *(6 - 3* u + u^3) + sa *(6 + 3*u - u^3 + sp^2 *(2 - 3 *u + u^3))))
-
-    return 1.0/_Omega0 * num/den
-end
 
 function _djacdsp(u::Float64, sp::Float64, sa::Float64)
 
@@ -108,8 +88,6 @@ function _djacdsa(u::Float64, sp::Float64, sa::Float64)
 end
 
 
-
-# for
 function djac_and_ds(u::Float64, sp::Float64, sa::Float64)
     rp, ra = rp_ra_from_sp_sa(sp,sa)
     E, L = E_L_from_rp_ra(rp,ra)
@@ -134,15 +112,11 @@ function djac_and_ds(u::Float64, sp::Float64, sa::Float64)
     djacdsp = _djacdsp(u,sp,sa)
     djacdsa = _djacdsa(u,sp,sa)
 
-    #println((dPHIdsa, dPHIdLa),"  ",(dPHIdsp, dPHIdLp))
-
     dsdsp = (1.0 - fu)/2.0
     dsdsa = (1.0 + fu)/2.0
 
     djacdE = dsadE*djacdsa + dspdE*djacdsp
     djacdL = dsadL*djacdsa + dspdL*djacdsp
-
-    # println((dspdE,dspdL,dsadE,dsadL))
 
     dsdE = dsadE*dsdsa+dspdE*dsdsp
     dsdL = dsadL*dsdsa+dspdL*dsdsp

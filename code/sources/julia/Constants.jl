@@ -144,5 +144,3 @@ const GAMMA_bc = gamma(9/2 - qCalc/2)
 `gamma(6-q) = gamma(6-qCalc)`.
 """
 const GAMMA_6q = gamma(6-qCalc)
-
-const ERFA = erf(a_err)

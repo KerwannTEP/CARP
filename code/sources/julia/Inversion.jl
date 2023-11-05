@@ -10,7 +10,7 @@ end
 function step_E_L(E::Float64, L::Float64, alpha::Float64, alpha_guess::Float64,
                 beta::Float64, beta_guess::Float64)
 
-    dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2 = grad_Jr_E_L_Wrap(E,L)
+    dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2 = grad_Jr_E_L(E,L)
 
     dalphadE = -_Omegam*alpha_guess^2 * d2JrdE2
     dalphadL = -_Omegam*alpha_guess^2 * d2JrdEL

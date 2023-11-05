@@ -1,16 +1,10 @@
-
-
-
-function grad_Jr_E_L(rp::Float64, ra::Float64, nbu::Int64 = 300)
+# Compute the gradient of Jr(E,L) by sampling linearly in u-anomaly
+# This should be done for orbits which are not too radial
+function grad_Jr_E_L_Linear(rp::Float64, ra::Float64, nbu::Int64 = 300)
     E, L = E_L_from_rp_ra(rp,ra)
     sp, sa = sp_sa_from_rp_ra(rp,ra)
     sma, ecc = sma_ecc_from_sp_sa(sp,sa)
 
-    # println(E," ", L )
-    # println(sp, " ",sa)
-    # println(sma, " ",ecc)
-
-    #println("(rp,ra) = ",(rp,ra))
 
     dJrdE = 0.0
     dJrdL = 0.0
@@ -27,14 +21,11 @@ function grad_Jr_E_L(rp::Float64, ra::Float64, nbu::Int64 = 300)
 
         djacdE, djacdL, dsdL = djac_and_ds(u,sp,sa)
 
-        # println(su," ",ru," ",xu," ",jac, " ",djacdE)
-
         dJrdE += jac
         dJrdL += jac/ru^2
         d2JrdE2 += djacdE
         d2JrdEL += djacdL
         d2JrdL2 += jac/ru^2 + L/ru^4*(djacdL*ru^2 - 2.0*_b^2*jac*su*dsdL)
-        # println(d2JrdE2)
 
     end
 
@@ -47,6 +38,11 @@ function grad_Jr_E_L(rp::Float64, ra::Float64, nbu::Int64 = 300)
     return dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2
 end
 
+# Compute the gradient of Jr(E,L) by sampling semi-logarithmically
+# Integral is done in two part: 
+# - near pericentre (log u-sampling)
+# - away from pericentre (linear u-sampling)
+# This should be done for orbits which are nearly radial
 function grad_Jr_L_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps::Float64=10^(-5),
             Lcutoff::Float64=0.0005)
 
@@ -75,9 +71,6 @@ function grad_Jr_L_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps:
             djacdE, djacdL, dsdL = djac_and_ds(u,sp,sa)
             expv = exp(v)
 
-        # println(su," ",ru," ",xu," ",jac, " ",djacdE)
-
-
             dJrdL += jac*expv/ru^2
 
             d2JrdL2 += jac*expv/ru^2 + L*expv/ru^4*(djacdL*ru^2 - 2.0*_b^2*jac*su*dsdL)
@@ -101,13 +94,9 @@ function grad_Jr_L_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps:
 
         return dJrdL, d2JrdL2
 
-    #error somewhere in there
     else # near-radial orbits
         # maybe we should see what is the exact limit for L=0
         # compute at cutoff for now
-
-        #println(Lcutoff)
-
 
 
         spcut, sacut = sp_sa_from_E_L(E,Lcutoff)
@@ -119,8 +108,6 @@ function grad_Jr_L_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps:
         rpcut, racut = rp_ra_from_sp_sa(spcut,sacut)
 
         vmincut = log(eps) + 4.0*log(Lcutoff)-2.0*log(E+1.0)-2.0*log(2.0) - log(3.0) - log(sacut-1.0)
-        #println(vmin)
-        #println("ici")
 
         dJrdLcut = 0.0
 
@@ -131,9 +118,6 @@ function grad_Jr_L_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps:
             ru = r_from_s(su)
             xu = ru/_b
             jac = Theta(u,spcut,sacut)
-
-
-        # println(su," ",ru," ",xu," ",jac, " ",djacdE)
 
 
             dJrdLcut += jac*exp(v)/ru^2
@@ -161,15 +145,10 @@ function grad_Jr_L_logIntegral(rp::Float64, ra::Float64, nbv::Int64 = nbu0, eps:
     end
 end
 
-# we should put a cutoff on E near circular orbits
-# those should be well defined at circular orbits (cf. isochrone potential)
-# ask Mike and Mathieu for near L=0 (Radial) and near Jr=0 (circular)
-function grad_Jr_E_L_Wrap(E::Float64, L::Float64, nbu::Int64 = nbu0, eps::Float64=10^(-5), Lcutoff::Float64=0.0005)
-    #println("(E,L) wrap= ",(E,L))
+# Wrapping the computation of the gradient of Jr(E,L) for all orbits
+function grad_Jr_E_L(E::Float64, L::Float64, nbu::Int64 = nbu0, eps::Float64=10^(-5), Lcutoff::Float64=0.0005)
     sp, sa = sp_sa_from_E_L(E,L)
-    #println("(sp,sa) wrap= ",(sp,sa))
     rp, ra = rp_ra_from_sp_sa(sp,sa)
-    #println("(rp,ra) wrap= ",(rp,ra))
 
     saCutoff = sp + 0.005
     _, raCutoff = rp_ra_from_sp_sa(sp,saCutoff)
@@ -185,10 +164,9 @@ function grad_Jr_E_L_Wrap(E::Float64, L::Float64, nbu::Int64 = nbu0, eps::Float6
         # compute value at cutoff sa
 
         if (L >= 0.05)
-            #println("oui")
-            dJrdECut, dJrdLCut, d2JrdE2Cut, d2JrdELCut, d2JrdL2Cut = grad_Jr_E_L(rp,raCutoff,nbu)
+            dJrdECut, dJrdLCut, d2JrdE2Cut, d2JrdELCut, d2JrdL2Cut = grad_Jr_E_L_Linear(rp,raCutoff,nbu)
         else
-            dJrdECut, _, d2JrdE2Cut, d2JrdELCut, _ = grad_Jr_E_L(rp,raCutoff,nbu)
+            dJrdECut, _, d2JrdE2Cut, d2JrdELCut, _ = grad_Jr_E_L_Linear(rp,raCutoff,nbu)
             dJrdLCut, d2JrdL2Cut = grad_Jr_L_logIntegral(rp,raCutoff,nbu,eps,Lcutoff)
         end
 
@@ -208,10 +186,10 @@ function grad_Jr_E_L_Wrap(E::Float64, L::Float64, nbu::Int64 = nbu0, eps::Float6
 
         if (L >= 0.05)
 
-            return grad_Jr_E_L(rp,ra,nbu)
+            return grad_Jr_E_L_Linear(rp,ra,nbu)
         else
 
-            dJrdE, _, d2JrdE2, d2JrdEL, _ = grad_Jr_E_L(rp,ra,nbu)
+            dJrdE, _, d2JrdE2, d2JrdEL, _ = grad_Jr_E_L_Linear(rp,ra,nbu)
             dJrdL, d2JrdL2 = grad_Jr_L_logIntegral(rp,ra,nbu,eps,Lcutoff)
             return dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2
         end
