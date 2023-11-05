@@ -16,9 +16,7 @@ end
 
 function sincosI(Lz::Float64, L::Float64)
     lz = _lz(Lz,L)
-#    sgn = sign(lz)
     cosI = lz
-#    sinI = sgn * sqrt(1.0 - lz^2)
     sinI = sqrt(1.0 - lz^2)
     return sinI, cosI
 end

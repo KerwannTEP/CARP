@@ -1,10 +1,3 @@
-using PolynomialRoots
-
-#
-# Redo everything (at least check functions) with tex_RR_Anisotropic function
-# (See OrbitalParameters.jl, etc)
-#
-
 ##################################################
 # Local diffusion coefficients
 ##################################################
@@ -45,22 +38,6 @@ end
 # Orbit-averaged (E,L,Lz)-diffusion coefficients
 ##################################################
 
-function radius_s_bounds(E::Float64, L::Float64)
-    if (E >= 0.0)
-        return "Unbounded orbit"
-    elseif (L > _Lc(E))
-        return "Not a possible orbit"
-    else
-        tE = E/_E0
-        tL = L/_L0
-        if (L != 0.0)
-            rts = sort(real(roots([1,-(tE-tL^2/2),-1,tE])))
-            return Float64(rts[2]), Float64(rts[3])
-        else
-            return 1.0, 1/tE
-        end
-    end
-end
 
 
 # USED
@@ -254,7 +231,7 @@ end
 # (Jr,L,cos I) space
 #####################################################################
 
-
+# ok
 function orbitAverageActionCoeffs_cosI_OptiExact_nbKseparate(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
