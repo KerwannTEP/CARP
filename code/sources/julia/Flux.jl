@@ -1,6 +1,6 @@
 
 # OK
-function fluxOptiExact_nbKseparate(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
+function fluxOptiExact(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default, nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default, 
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
@@ -25,7 +25,7 @@ function fluxOptiExact_nbKseparate(Jr::Float64, L::Float64, Lz::Float64, m_field
     E_Jrm_Lp = E_from_Jr_L(Jr_m,L_p,nbu)
     E_Jrm_Lm = E_from_Jr_L(Jr_m,L_m,nbu)
 
-    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffsOptiExact(Jr,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
 
 
     Frot = _Frot(E,L,Lz,alpha)
@@ -33,19 +33,19 @@ function fluxOptiExact_nbKseparate(Jr::Float64, L::Float64, Lz::Float64, m_field
 
     # Partial derivatives
 
-    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr_p,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffsOptiExact(Jr_p,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Jrp = _Frot(E_Jrp,L,Lz,alpha)
-    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr_m,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffsOptiExact(Jr_m,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Jrm = _Frot(E_Jrm,L,Lz,alpha)
 
-    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffsOptiExact(Jr,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Lp = _Frot(E_Lp,L_p,Lz,alpha)
-    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffsOptiExact(Jr,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Lm = _Frot(E_Lm,L_m,Lz,alpha)
 
-    dJr_Lzp, dL_Lzp, dLz_Lzp, dJrJr_Lzp, dLL_Lzp, dLzLz_Lzp, dJrL_Lzp, dJrLz_Lzp, dLLz_Lzp = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lzp, dL_Lzp, dLz_Lzp, dJrJr_Lzp, dLL_Lzp, dLzLz_Lzp, dJrL_Lzp, dJrLz_Lzp, dLLz_Lzp = orbitAverageActionCoeffsOptiExact(Jr,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Lzp = _Frot(E,L,Lz_p,alpha)
-    dJr_Lzm, dL_Lzm, dLz_Lzm, dJrJr_Lzm, dLL_Lzm, dLzLz_Lzm, dJrL_Lzm, dJrLz_Lzm, dLLz_Lzm = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lzm, dL_Lzm, dLz_Lzm, dJrJr_Lzm, dLL_Lzm, dLzLz_Lzm, dJrL_Lzm, dJrLz_Lzm, dLLz_Lzm = orbitAverageActionCoeffsOptiExact(Jr,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Lzm =_Frot(E,L,Lz_m,alpha)
 
 
@@ -110,7 +110,7 @@ function fluxOptiExactSign_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::
     E_Jrm_Lp = E_from_Jr_L(Jr_m,L_p,nbu)
     E_Jrm_Lm = E_from_Jr_L(Jr_m,L_m,nbu)
 
-    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffsOptiExact(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
 
 
     Frot = _Frot_cosI(E,L,cosI,alpha)
@@ -118,14 +118,14 @@ function fluxOptiExactSign_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::
 
     # Partial derivatives
 
-    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr_p,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffsOptiExact(Jr_p,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Jrp = _Frot_cosI(E_Jrp,L,cosI,alpha)
-    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr_m,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffsOptiExact(Jr_m,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Jrm = _Frot_cosI(E_Jrm,L,cosI,alpha)
 
-    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L_p,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffsOptiExact(Jr,L_p,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Lp = _Frot_cosI(E_Lp,L_p,cosI,alpha)
-    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffsOptiExact_nbKseparate(Jr,L_m,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffsOptiExact(Jr,L_m,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
     Frot_Lm = _Frot_cosI(E_Lm,L_m,cosI,alpha)
 
     # Jr-component
@@ -202,8 +202,8 @@ function dFdtOptiExactSign_2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float6
 
         dJr = (fJr_p-fJr_m)/(2.0*eps)
 
-        fcosI_p  = FluxCosIOptiExact_nbKseparate(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
-        fcosI_m  = FluxCosIOptiExact_nbKseparate(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+        fcosI_p  = FluxCosIOptiExact(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+        fcosI_m  = FluxCosIOptiExact(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
 
 
         dcosI = (fcosI_p-fcosI_m)/(2.0*eps)
@@ -237,8 +237,8 @@ function dFdtOptiExactSign_2D_LcosI(L::Float64, cosI::Float64, m_field::Float64,
 
         dL = (fL_p-fL_m)/(2.0*eps)
 
-        fcosI_p  = FluxCosIOptiExact_nbKseparate(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
-        fcosI_m  = FluxCosIOptiExact_nbKseparate(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+        fcosI_p  = FluxCosIOptiExact(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+        fcosI_m  = FluxCosIOptiExact(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
 
 
         dcosI = (fcosI_p-fcosI_m)/(2.0*eps)

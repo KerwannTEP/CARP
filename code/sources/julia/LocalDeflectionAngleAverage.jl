@@ -1,6 +1,6 @@
 
 # USED
-function localVelChange3DAngleAverageExact_nbKseparate(r::Float64, vr::Float64,
+function localVelChange3DAngleAverageExact(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbw::Int64=nbw_default,
                         nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
@@ -16,11 +16,6 @@ function localVelChange3DAngleAverageExact_nbKseparate(r::Float64, vr::Float64,
     L = r*vt
     Lz = L*cosI
     sinI = sqrt(abs(1.0 - cosI^2))
-
-
-
-    # x = r*costheta*cosI
-    # y = r*sintheta
 
     dvPar = 0.0
     dvParSq = 0.0
@@ -57,7 +52,6 @@ function localVelChange3DAngleAverageExact_nbKseparate(r::Float64, vr::Float64,
                 w3 = w*sinvarphi*sinphi
 
                 Ep = E + 0.5*w^2 - v*w1
-                # Lp = r * sqrt(v^2+w^2-2.0*v*w*cos(varphi)-(vr/v*(v-w1)+vt/v*(-w2))^2)
 
                 v1p = v-w1
                 v2p = -w2
@@ -120,10 +114,6 @@ function localVelChange3DAngleAverageExact_nbKseparate(r::Float64, vr::Float64,
 
     end
 
-    # dvPar *= pi/nbK*2.0*pi/nbK*(1.0/nbK)
-    # dvParSq *= pi/nbK*2.0*pi/nbK*(1.0/nbK)
-    # dvPerSq *= pi/nbK*2.0*pi/nbK*(1.0/nbK)
-
     pref = 2.0*pi^2/(nbw*nbvarphi*nbphi)
     pref *= 2.0*pi*_G^2*logCoulomb
 
@@ -141,7 +131,7 @@ end
 # cosI-drift coeff
 # analytical
 # w-integral becomes zeta-integral
-function localDriftCosIAngleAverageExact_nbKseparate(r::Float64, vr::Float64,
+function localDriftCosIAngleAverageExact(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbzeta::Int64=nbw_default,
                         nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
