@@ -7,7 +7,7 @@ const nbJrMeasure = 25 # Number of Jr sampling points
 
 const epsRef = 0.01
 
-const nbL = 5 #50
+const nbL = 50
 const Lmax = 3.0
 
 
@@ -30,7 +30,6 @@ const tabcosINeg = [cosIminNeg + (cosImaxNeg-cosIminNeg)*(i-1)/nbcosINeg for i=1
 const tabCosIMeasure = vcat(tabcosINeg,tabcosIPos)
 const nbCosIMeasure = nbcosINeg+nbcosIPos
 
-#println(tabCosIMeasure)
 
 ########################################
 
@@ -66,19 +65,13 @@ function tabdFdt!()
 
     println("Nb Threads = ",Threads.nthreads())
 
-    @sync begin
-        for iGrid=1:nbJrCosIGrid
-            Threads.@spawn begin
+    Threads.@threads for iGrid=1:nbJrCosIGrid
 
+        CosIMeasure, JrMeasure = tabCosIJrGrid[1,iGrid], tabCosIJrGrid[2,iGrid]
+        dfdt = dFdt2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
 
-                
+        tabdFdt[iGrid] = dfdt
 
-                CosIMeasure, JrMeasure = tabCosIJrGrid[1,iGrid], tabCosIJrGrid[2,iGrid]
-                dfdt = dFdtOptiExactSign_2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
-
-                tabdFdt[iGrid] = dfdt
-            end
-        end
     end
 
 end

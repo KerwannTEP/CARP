@@ -136,13 +136,13 @@ end
 
 function _Frot(E::Float64, L::Float64, Lz::Float64, alpha::Float64=alphaRot)
     Ftot = _F(E,L)
-    Frot = Ftot*(1.0 + alpha*_gsign(Lz/L))
+    Frot = Ftot*(1.0 + alpha*sign(Lz/L))
 end
 
 # Normalized to M = int dJr dL dcosI _Frot_cosI(Jr,L,cosI)
 function _Frot_cosI(E::Float64, L::Float64, cosI::Float64, alpha::Float64=alphaRot)
     Ftot = _F(E,L)
-    Frot = L*Ftot*(1.0 + alpha*_gsign(cosI))
+    Frot = L*Ftot*(1.0 + alpha*sign(cosI))
 end
 
 ##################################################
@@ -190,7 +190,7 @@ function getHGInt(nbxInt::Int64=1000)
 end
 
 
-const tabHyperGeoInt = SVector{4}(getHGInt())
+const tabHyperGeoInt = SVector{2}(getHGInt())
 
 # HG1   = _₂F₁(qCalc/2,qCalc-3.5,1.0,x)`
 const H_1 = tabHyperGeoInt[1]

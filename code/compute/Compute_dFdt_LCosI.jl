@@ -3,7 +3,7 @@ include("../sources/julia/Main.jl")
 using HDF5
 
 const LminMeasure, LmaxMeasure = _L0*0.02, _L0*1.0 # Jr range
-const nbLMeasure = 25#50 # Number of Jr sampling points
+const nbLMeasure = 25 # Number of Jr sampling points
 
 const epsRef = 0.01
 
@@ -14,7 +14,7 @@ const Jrmax = 3.0
 # cosI-sampling for cos I>0
 const cosIminPos = 0.02
 const cosImaxPos = 0.98
-const nbcosIPos = 20#25
+const nbcosIPos = 20
 
 const tabcosIPos = [cosIminPos + (cosImaxPos-cosIminPos)*(i-0)/nbcosIPos for i=1:nbcosIPos]
 const tabFluxIPos = zeros(Float64,nbcosIPos)
@@ -23,14 +23,13 @@ const tabFluxIPos = zeros(Float64,nbcosIPos)
 # cosI-sampling for cos I<0
 const cosIminNeg = -0.98
 const cosImaxNeg = -0.02
-const nbcosINeg = 20#25
+const nbcosINeg = 20
 
 const tabcosINeg = [cosIminNeg + (cosImaxNeg-cosIminNeg)*(i-1)/nbcosINeg for i=1:nbcosINeg]
 
 const tabCosIMeasure = vcat(tabcosINeg,tabcosIPos)
 const nbCosIMeasure = nbcosINeg+nbcosIPos
 
-#println(tabCosIMeasure)
 
 ########################################
 
@@ -68,7 +67,7 @@ function tabdFdt!()
 
     Threads.@threads for iGrid=1:nbLCosIGrid
         CosIMeasure, LMeasure = tabCosILGrid[1,iGrid], tabCosILGrid[2,iGrid]
-        dfdt = dFdtOptiExactSign_2D_LcosI(LMeasure,CosIMeasure,m_field,alphaRot,nbJr,Jrmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
+        dfdt = dFdt2D_LcosI(LMeasure,CosIMeasure,m_field,alphaRot,nbJr,Jrmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
 
         tabdFdt[iGrid] = dfdt
     end
