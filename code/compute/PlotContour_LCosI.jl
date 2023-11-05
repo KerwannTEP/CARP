@@ -57,7 +57,7 @@ const pref = 1.0
 # Plotting the data
 ########################################
 println("Plotting the data...")
-p = Plots.contourf(tabCosI,tabL,tabdFdt,color=:bluesreds, clims= (-pref, pref).* maxdata, title=L" \partial F/\partial t \ [ \ \!\!\!\!\! \times\!\! 10^5]")
+p = Plots.contourf(tabCosI,tabL,tabdFdt,color=:bluesreds, clims= (-pref, pref).* maxdata, xlabel="cos I", ylabel="L", title=L" \partial F/\partial t \ [ \ \!\!\!\!\! \times\!\! 10^5]")
 Plots.savefig(p,"../graphs/Map_dFdt_LCosI_q_"*string(qCalc)*"_a_"*string(alphaRot)*".png") # Saves the figure
 Plots.display(p)
 readline()
