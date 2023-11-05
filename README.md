@@ -78,5 +78,5 @@ The resulting file will be created in the folder `code/graphs` under the name
 `Map_dFdt_JrL_q_0.0_a_0.1.png`.
 
 
-![`dF/dt (Jr,L)` for `q=0` and `$alpha=0.1`]("code/graphs/examples/Map_dFdt_JrL_q_0.0_a_0.1.png)
+![`dF/dt (Jr,L)` for `q=0` and `$alpha=0.1`](code/graphs/examples/Map_dFdt_JrL_q_0.0_a_0.1.png)
 
