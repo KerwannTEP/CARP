@@ -4,12 +4,12 @@ using HDF5
 
 const JrminMeasure, JrmaxMeasure = _L0*0.02, _L0*0.5 # Jr range
 const LminMeasure, LmaxMeasure = _L0*0.02, _L0*1.0 # L range
-const nbJrMeasure = 50 # Number of Jr sampling points
-const nbLMeasure = 100 # Number of L sampling points
+const nbJrMeasure = 5 # Number of Jr sampling points
+const nbLMeasure = 10 # Number of L sampling points
 
 const epsRef = 0.01
 
-const nbCosI = 50
+const nbCosI = 10
 
 ########################################
 
@@ -42,7 +42,9 @@ function tabLJrGrid!()
 end
 
 function tabdFdt!()
+    
 
+    countbin = Threads.Atomic{Int}(0);
     println("Nb Threads = ",Threads.nthreads())
 
     Threads.@threads for iGrid=1:nbJrLGrid
@@ -50,6 +52,9 @@ function tabdFdt!()
         dfdt = dFdt2D_JrL(JrMeasure,LMeasure,m_field,alphaRot,nbCosI,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
 
         tabdFdt[iGrid] = dfdt
+
+        Threads.atomic_add!(countbin, 1)
+        println("Progress = ",countbin[],"/",nbJrLGrid)
     end
 
 end
@@ -82,7 +87,12 @@ function writedump!(namefile)
 end
 ########################################
 
+println("Setting up the action-space grid ... ")
+
 @time tabLJrGrid!()
+
+println("Computing the relaxation rate in action space ... ")
+
 @time tabdFdt!()
 
 ########################################

@@ -3,18 +3,18 @@ include("../sources/julia/Main.jl")
 using HDF5
 
 const JrminMeasure, JrmaxMeasure = _L0*0.02, _L0*0.5 # Jr range
-const nbJrMeasure = 25 # Number of Jr sampling points
+const nbJrMeasure = 5 # Number of Jr sampling points
 
 const epsRef = 0.01
 
-const nbL = 50
-const Lmax = 3.0
+const nbL = 10  
+const Lmax = 1.0
 
 
 # cosI-sampling for cos I>0
 const cosIminPos = 0.02
 const cosImaxPos = 0.98
-const nbcosIPos = 20
+const nbcosIPos = 5
 
 const tabcosIPos = [cosIminPos + (cosImaxPos-cosIminPos)*(i-0)/nbcosIPos for i=1:nbcosIPos]
 const tabFluxIPos = zeros(Float64,nbcosIPos)
@@ -23,7 +23,7 @@ const tabFluxIPos = zeros(Float64,nbcosIPos)
 # cosI-sampling for cos I<0
 const cosIminNeg = -0.98
 const cosImaxNeg = -0.02
-const nbcosINeg = 20
+const nbcosINeg = 5
 
 const tabcosINeg = [cosIminNeg + (cosImaxNeg-cosIminNeg)*(i-1)/nbcosINeg for i=1:nbcosINeg]
 
@@ -63,14 +63,20 @@ end
 
 function tabdFdt!()
 
+    countbin = Threads.Atomic{Int}(0);
     println("Nb Threads = ",Threads.nthreads())
 
     Threads.@threads for iGrid=1:nbJrCosIGrid
+
+        
 
         CosIMeasure, JrMeasure = tabCosIJrGrid[1,iGrid], tabCosIJrGrid[2,iGrid]
         dfdt = dFdt2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
 
         tabdFdt[iGrid] = dfdt
+
+        Threads.atomic_add!(countbin, 1)
+        println("Progress = ",countbin[],"/",nbJrCosIGrid)
 
     end
 
@@ -104,7 +110,12 @@ function writedump!(namefile)
 end
 ########################################
 
+println("Setting up the action-space grid ... ")
+
 @time tabCosIJrGrid!()
+
+println("Computing the relaxation rate in action space ... ")
+
 @time tabdFdt!()
 
 ########################################
