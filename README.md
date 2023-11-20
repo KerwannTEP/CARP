@@ -61,7 +61,7 @@ $ julia -t 12 Compute_dFdt_JrL.jl --q 0.0 --a 0.1
 
 
 The resulting file will be created in the folder `code/data` under the name 
-`Dump_dFdt_JrL_Map_q_0.0_a_0.1.hf5`.
+`Dump_dFdt_JrL_Map_q_0.0_a_0.1.hf5` in about 30 seconds for these parameters.
 
 ## Plotting the diffusion rate in action space
 

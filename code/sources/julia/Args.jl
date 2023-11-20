@@ -8,11 +8,11 @@ tabargs = ArgParseSettings()
     "--nbAvr"
     help = "Number of sampling points for the radius orbit-averaging integral"
     arg_type = Int64
-    default = 50
+    default = 20
     "--nbu"
     help = "Number of sampling points for the radius orbit-averaging integral for Jr,L gradients"
     arg_type = Int64
-    default = 50
+    default = 300
     "--q"
     help = "Anisotropy parameter q for the Plummer model."
     arg_type = Float64
@@ -24,15 +24,15 @@ tabargs = ArgParseSettings()
     "--nbw"
     help = "Number of sampling points for the 3D Rosenbluth integrals: w-integral"
     arg_type = Int64
-    default = 100
+    default = 20
     "--nbphi"
     help = "Number of sampling points for the 3D Rosenbluth integrals: phi-integral"
     arg_type = Int64
-    default = 100
+    default = 20
     "--nbvarphi"
     help = "Number of sampling points for the 3D Rosenbluth integrals: varphi-integral"
     arg_type = Int64
-    default = 100
+    default = 20
 
 end
 parsed_args = parse_args(tabargs)

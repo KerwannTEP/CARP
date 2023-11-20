@@ -3,7 +3,7 @@ include("../sources/julia/Main.jl")
 using HDF5
 
 const JrminMeasure, JrmaxMeasure = _L0*0.02, _L0*0.5 # Jr range
-const nbJrMeasure = 5 # Number of Jr sampling points
+const nbJrMeasure = 10 # Number of Jr sampling points
 
 const epsRef = 0.01
 
@@ -14,7 +14,7 @@ const Lmax = 1.0
 # cosI-sampling for cos I>0
 const cosIminPos = 0.02
 const cosImaxPos = 0.98
-const nbcosIPos = 5
+const nbcosIPos = 10
 
 const tabcosIPos = [cosIminPos + (cosImaxPos-cosIminPos)*(i-0)/nbcosIPos for i=1:nbcosIPos]
 const tabFluxIPos = zeros(Float64,nbcosIPos)
@@ -23,7 +23,7 @@ const tabFluxIPos = zeros(Float64,nbcosIPos)
 # cosI-sampling for cos I<0
 const cosIminNeg = -0.98
 const cosImaxNeg = -0.02
-const nbcosINeg = 5
+const nbcosINeg = 10
 
 const tabcosINeg = [cosIminNeg + (cosImaxNeg-cosIminNeg)*(i-1)/nbcosINeg for i=1:nbcosINeg]
 

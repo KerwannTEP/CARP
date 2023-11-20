@@ -4,8 +4,8 @@ using HDF5
 
 const JrminMeasure, JrmaxMeasure = _L0*0.02, _L0*0.5 # Jr range
 const LminMeasure, LmaxMeasure = _L0*0.02, _L0*1.0 # L range
-const nbJrMeasure = 5 # Number of Jr sampling points
-const nbLMeasure = 10 # Number of L sampling points
+const nbJrMeasure = 20 # Number of Jr sampling points
+const nbLMeasure = 40 # Number of L sampling points
 
 const epsRef = 0.01
 
