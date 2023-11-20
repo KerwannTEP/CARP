@@ -2,27 +2,27 @@ include("../sources/julia/Main.jl")
 
 using HDF5
 
+# Hyperparameters
+const epsRef = 0.01
+const nbCosI = 10
+
+# Action space sampling
 const JrminMeasure, JrmaxMeasure = _L0*0.02, _L0*0.5 # Jr range
 const LminMeasure, LmaxMeasure = _L0*0.02, _L0*1.0 # L range
 const nbJrMeasure = 20 # Number of Jr sampling points
 const nbLMeasure = 40 # Number of L sampling points
 
-const epsRef = 0.01
 
-const nbCosI = 10
 
 ########################################
 
 const tabJrMeasure = collect(range(JrminMeasure,length=nbJrMeasure,JrmaxMeasure))
 const tabLMeasure = collect(range(LminMeasure,length=nbLMeasure,LmaxMeasure))
 const nbJrLGrid = nbJrMeasure*nbLMeasure
-
 const tabLJrGrid  = zeros(Float64,2,nbJrLGrid) # Location (L,Jr) of the grid points where the diffusion coefficients are computed
 const tabdFdt  = zeros(Float64,nbJrLGrid) # Values of dF/dt on the (L,Jr)-grid
 
-
 ########################################
-
 
 
 ########################################
@@ -88,11 +88,9 @@ end
 ########################################
 
 println("Setting up the action-space grid ... ")
-
 @time tabLJrGrid!()
 
 println("Computing the relaxation rate in action space ... ")
-
 @time tabdFdt!()
 
 ########################################

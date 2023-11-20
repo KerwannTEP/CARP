@@ -63,6 +63,17 @@ $ julia -t 12 Compute_dFdt_JrL.jl --q 0.0 --a 0.1
 The resulting file will be created in the folder `code/data` under the name 
 `Dump_dFdt_JrL_Map_q_0.0_a_0.1.hf5` in about 30 seconds for these parameters.
 
+
+One may also be interested in samlping the $(J_{\mathrm{r}},\cos I)$ space. To that end, one should use the following command
+
+```
+$ cd ./code/compute
+$ julia -t 12 Compute_dFdt_JrCosI.jl --q 0.0 --a 0.1 --nbw 20 --nbphi 200 --mbvarphi 50
+```
+
+The resulting file will be created in the folder `code/data` under the name 
+`Dump_dFdt_JrCosI_Map_q_0.0_a_0.1.hf5` in about 120 seconds for these parameters.
+
 ## Plotting the diffusion rate in action space
 
 After having sampled a 2D-slice of the action space, one may plot the data using the Julia scripts located at `code/compute/`.
@@ -80,3 +91,15 @@ The resulting file will be created in the folder `code/graphs` under the name
 
 ![`dF/dt (Jr,L)` for `q=0` and `$alpha=0.1`](code/graphs/examples/Map_dFdt_JrL_q_0.0_a_0.1.png)
 
+Similarly, `PlotContour_JrCosI.jl` will compute a 2D map in $(J_{\mathrm{r}},\cos I)$ space for the data of the cluster $(q,\alpha)=(0.0,0.1)$ when typing the follow command in the console
+
+```
+$ cd ./code/compute
+$ julia PlotContour_JrCosI.jl --q 0.0 --a 0.1
+```
+
+The resulting file will be created in the folder `code/graphs` under the name 
+`Map_dFdt_JrCosI_q_0.0_a_0.1.png`.
+
+
+![`dF/dt (Jr,cos I)` for `q=0` and `$alpha=0.1`](code/graphs/examples/Map_dFdt_JrCosI_q_0.0_a_0.1.png)
