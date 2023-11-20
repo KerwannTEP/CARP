@@ -50,8 +50,10 @@ end
 println("Recovering plot data...")
 const tabCosI, tabL, tabdFdt = openData(namefile)
 
-const maxdata = maximum(abs.(tabdFdt))
-const pref = 1.0
+
+
+const maxabs = maximum(abs.(tabdFdt))
+const pref = 0.4 # plot dF/dt up to a fraction "pref" of the maximum (to avoid the predominance of numerical artifacts from the borders)
 
 const nb_contours = 50
 
@@ -59,7 +61,7 @@ const nb_contours = 50
 # Plotting the data
 ########################################
 println("Plotting the data...")
-p = Plots.contourf(tabCosI,tabL,tabdFdt,levels=nb_contours, color=:bluesreds, clims= (-pref, pref).* maxdata, xlabel="cos I", ylabel="L", title=L" \partial F/\partial t \ [ \ \!\!\!\!\! \times\!\! 10^5]")
+p = Plots.contourf(tabCosI,tabL,tabdFdt,levels=nb_contours, color=:bluesreds, clims= (-maxabs, maxabs).*pref, xlabel="cos I", ylabel="L", title=L" \partial F/\partial t \ [ \ \!\!\!\!\! \times\!\! 10^5]")
 Plots.savefig(p,"../graphs/Map_dFdt_LCosI_q_"*string(qCalc)*"_a_"*string(alphaRot)*".png") # Saves the figure
 Plots.display(p)
 readline()
