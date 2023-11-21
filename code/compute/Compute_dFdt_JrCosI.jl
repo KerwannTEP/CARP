@@ -64,7 +64,7 @@ function tabdFdt!()
     Threads.@threads for iGrid=1:nbJrCosIGrid
 
         CosIMeasure, JrMeasure = tabCosIJrGrid[1,iGrid], tabCosIJrGrid[2,iGrid]
-        dfdt = dFdt2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbwSamp,nbvarphiSamp,nbphiSamp,nbu0,epsRef)
+        dfdt = dFdt2D_JrcosI(JrMeasure,CosIMeasure,m_field,alphaRot,nbL,Lmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
         tabdFdt[iGrid] = dfdt
 
         Threads.atomic_add!(countbin, 1)
