@@ -28,7 +28,7 @@ const alphaRot = parsed_args["a"]
 const nbu0 = parsed_args["nbu"]
 const nbw_default = parsed_args["nbw"]
 const nbphi_default = parsed_args["nbphi"]
-const nbvarphi_default = parsed_args["nbvarphi"]
+const nbvartheta_default = parsed_args["nbvartheta"]
 
 ##################################################
 ##################################################

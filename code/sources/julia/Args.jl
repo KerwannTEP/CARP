@@ -29,8 +29,8 @@ tabargs = ArgParseSettings()
     help = "Number of sampling points for the 3D Rosenbluth integrals: phi-integral"
     arg_type = Int64
     default = 20
-    "--nbvarphi"
-    help = "Number of sampling points for the 3D Rosenbluth integrals: varphi-integral"
+    "--nbvartheta"
+    help = "Number of sampling points for the 3D Rosenbluth integrals: vartheta-integral"
     arg_type = Int64
     default = 20
 
