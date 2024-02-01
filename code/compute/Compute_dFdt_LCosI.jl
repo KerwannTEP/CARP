@@ -7,9 +7,9 @@ using HDF5
 #################################################################################################
 #
 # This script requires a high number of sampling nodes nbphi to converge
-# The following command yields an acceptably converged map 
+# The following command yields an acceptably converged map
 #
-# julia -t 12 Compute_dFdt_LCosI.jl --q 0.0 --a 0.1 --nbw 20 --nbphi 200 --nbvarphi 50
+# julia -t 12 Compute_dFdt_LCosI.jl --q 0.0 --a 0.1 --nbw 20 --nbphi 200 --nbvartheta 50
 #
 # Duration ~ 550 seconds
 #
@@ -77,7 +77,7 @@ function tabdFdt!()
 
     Threads.@threads for iGrid=1:nbLCosIGrid
         CosIMeasure, LMeasure = tabCosILGrid[1,iGrid], tabCosILGrid[2,iGrid]
-        dfdt = dFdt2D_LcosI(LMeasure,CosIMeasure,m_field,alphaRot,nbJr,Jrmax,nbAvr_default,nbw_default,nbvarphi_default,nbphi_default,nbu0,epsRef)
+        dfdt = dFdt2D_LcosI(LMeasure,CosIMeasure,m_field,alphaRot,nbJr,Jrmax,nbAvr_default,nbw_default,nbvartheta_default,nbphi_default,nbu0,epsRef)
         tabdFdt[iGrid] = dfdt
 
         Threads.atomic_add!(countbin, 1)

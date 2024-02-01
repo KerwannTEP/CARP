@@ -6,7 +6,7 @@
 function localOrbitChangeAngleAverage(r::Float64, vr::Float64, vt::Float64,
                         cosI::Float64, m_field::Float64, alpha::Float64=alphaRot,
                         nbw::Int64=nbw_default,
-                        nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+                        nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
                         m_test::Float64=m_field)
 
     v = sqrt(vr^2+vt^2)
@@ -15,7 +15,7 @@ function localOrbitChangeAngleAverage(r::Float64, vr::Float64, vt::Float64,
 
     sinI = sqrt(abs(1.0 - cosI^2))
 
-    dvPar, dvPar2, dvPerp2, sinSqdvPerSq = localVelChange3DAngleAverage(r,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+    dvPar, dvPar2, dvPerp2, sinSqdvPerSq = localVelChange3DAngleAverage(r,vr,vt,cosI,m_field,alpha,nbw,nbvartheta,nbphi,m_test)
 
     dE   = 0.5*dvPar2 + 0.5*dvPerp2 + v*dvPar
     dE2  = v^2* dvPar2
@@ -44,7 +44,7 @@ end
 function orbitAverageEnergyCoeffs(sp::Float64, sa::Float64, cosI::Float64,
                     m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                     nbw::Int64=nbw_default,
-                    nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+                    nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
                     m_test::Float64=m_field)
 
     avrDE = 0.0
@@ -77,7 +77,7 @@ function orbitAverageEnergyCoeffs(sp::Float64, sa::Float64, cosI::Float64,
         halfperiod += jac_loc
 
 
-        dE, dL, dLz, dE2, dL2, dLz2, dEdL, dEdLz, dLdLz = localOrbitChangeAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+        dE, dL, dLz, dE2, dL2, dLz2, dEdL, dEdLz, dLdLz = localOrbitChangeAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvartheta,nbphi,m_test)
 
         avrDE += jac_loc*dE
         avrDL += jac_loc*dL
@@ -121,7 +121,7 @@ end
 function orbitAverageActionCoeffs(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
-                                nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+                                nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
                                 nbu::Int64=nbu0, m_test::Float64=m_field)
 
     E = E_from_Jr_L(Jr,L,nbu)
@@ -133,7 +133,7 @@ function orbitAverageActionCoeffs(Jr::Float64, L::Float64, cosI::Float64, m_fiel
     end
     sma, ecc = sma_ecc_from_sp_sa(sp,sa)
 
-    avrDE, avrDL, avrDLz, avrDEE, avrDLL, avrDLzLz, avrDEL, avrDELz, avrDLLz = orbitAverageEnergyCoeffs(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
+    avrDE, avrDL, avrDLz, avrDEE, avrDLL, avrDLzLz, avrDEL, avrDELz, avrDLLz = orbitAverageEnergyCoeffs(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,m_test)
 
     dJrdE, dJrdL, d2JrdE2, d2JrdEL, d2JrdL2 = grad_Jr_E_L(E,L,nbu)
 
@@ -159,11 +159,11 @@ end
 function orbitAverageActionCoeffs_cosI(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
                                 alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
                                 nbw::Int64=nbw_default,
-                                nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+                                nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
                                  nbu::Int64=nbu0, m_test::Float64=m_field)
 
 
-    avrDJr, avrDL, avrDLz, avrDJrJr, avrDLL, avrDLzLz, avrDJrL, avrDJrLz, avrDLLz = orbitAverageActionCoeffs(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    avrDJr, avrDL, avrDLz, avrDJrJr, avrDLL, avrDLzLz, avrDJrL, avrDJrLz, avrDLLz = orbitAverageActionCoeffs(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
 
     avrDI = -cosI/L*avrDL + 1.0/L*avrDLz + cosI/L^2*avrDLL- 1.0/L^2*avrDLLz
     avrDJrI = -cosI/L*avrDJrL + 1.0/L*avrDJrLz

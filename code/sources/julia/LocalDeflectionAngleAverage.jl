@@ -4,7 +4,7 @@
 function localVelChange3DAngleAverage(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbw::Int64=nbw_default,
-                        nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+                        nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
                         m_test::Float64=m_field)
 
 
@@ -23,11 +23,11 @@ function localVelChange3DAngleAverage(r::Float64, vr::Float64,
     dvPerSq = 0.0
     sinSqdvPerSq = 0.0
 
-    for ivarphi=1:nbvarphi
-        varphi = pi*(ivarphi-0.5)/nbvarphi
-        sinvarphi, cosvarphi = sincos(varphi)
+    for ivartheta=1:nbvartheta
+        vartheta = pi*(ivartheta-0.5)/nbvartheta
+        sinvartheta, cosvartheta = sincos(vartheta)
 
-        wmax = v*cosvarphi + sqrt(abs(vSq*cosvarphi^2 - 2.0*E))
+        wmax = v*cosvartheta + sqrt(abs(vSq*cosvartheta^2 - 2.0*E))
 
         dvPar_phi = 0.0
         dvParSq_phi = 0.0
@@ -48,9 +48,9 @@ function localVelChange3DAngleAverage(r::Float64, vr::Float64,
             for iw=1:nbw
                 w = wmax*(iw-0.5)/nbw
 
-                w1 = w*cosvarphi
-                w2 = w*sinvarphi*cosphi
-                w3 = w*sinvarphi*sinphi
+                w1 = w*cosvartheta
+                w2 = w*sinvartheta*cosphi
+                w3 = w*sinvartheta*sinphi
 
                 Ep = E + 0.5*w^2 - v*w1
 
@@ -107,15 +107,15 @@ function localVelChange3DAngleAverage(r::Float64, vr::Float64,
 
 
 
-        dvPar += 2.0*sinvarphi*cosvarphi*dvPar_phi
-        dvParSq += sinvarphi^3*dvParSq_phi
-        dvPerSq += sinvarphi*(1.0+cosvarphi^2)*dvPerSq_phi
-        sinSqdvPerSq += sinvarphi*(1.0+cosvarphi^2)*sinSqdvPerSq_phi
+        dvPar += 2.0*sinvartheta*cosvartheta*dvPar_phi
+        dvParSq += sinvartheta^3*dvParSq_phi
+        dvPerSq += sinvartheta*(1.0+cosvartheta^2)*dvPerSq_phi
+        sinSqdvPerSq += sinvartheta*(1.0+cosvartheta^2)*sinSqdvPerSq_phi
 
 
     end
 
-    pref = 2.0*pi^2/(nbw*nbvarphi*nbphi)
+    pref = 2.0*pi^2/(nbw*nbvartheta*nbphi)
     pref *= 2.0*pi*_G^2*logCoulomb
 
     dvPar *= -pref * (m_field + m_test)
@@ -133,7 +133,7 @@ end
 function localDriftCosIAngleAverage(r::Float64, vr::Float64,
                         vt::Float64, cosI::Float64, m_field::Float64,
                         alpha::Float64=alphaRot, nbzeta::Int64=nbw_default,
-                        nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+                        nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
                         m_test::Float64=m_field)
 
 
@@ -150,11 +150,11 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
     drift = 0.0
 
 
-    for ivarphi=1:nbvarphi
-        varphi = pi*(ivarphi-0.5)/nbvarphi
-        sinvarphi, cosvarphi = sincos(varphi)
+    for ivartheta=1:nbvartheta
+        vartheta = pi*(ivartheta-0.5)/nbvartheta
+        sinvartheta, cosvartheta = sincos(vartheta)
 
-        wmax = v*cosvarphi + sqrt(abs(vSq*cosvarphi^2 - 2.0*E))
+        wmax = v*cosvartheta + sqrt(abs(vSq*cosvartheta^2 - 2.0*E))
 
         drift_phi = 0.0
 
@@ -164,8 +164,8 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
 
             drift_zeta = 0.0
 
-            xwmax = -(vt-vt_v*wmax*cosvarphi+vr_v*wmax*sinvarphi*sinphi)*cosI/(wmax*sinI*abs(sinvarphi*cosphi))
-            xinf = (vt_v*cosvarphi-vr_v*sinvarphi*sinphi)*cosI/(sinI*abs(sinvarphi*cosphi))
+            xwmax = -(vt-vt_v*wmax*cosvartheta+vr_v*wmax*sinvartheta*sinphi)*cosI/(wmax*sinI*abs(sinvartheta*cosphi))
+            xinf = (vt_v*cosvartheta-vr_v*sinvartheta*sinphi)*cosI/(sinI*abs(sinvartheta*cosphi))
             # x(w) must be between -1 and 1
             # wmin = w(x=-1)
 
@@ -204,11 +204,11 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
                         zeta = zetamin + (zetamax-zetamin)/nbzeta*(izeta-0.5)
                         sinzeta, coszeta = sincos(zeta)
                         x = cos(zeta)
-                        w = -vt*cosI/(vr_v*sinvarphi*sinphi*cosI-vt_v*cosvarphi*cosI+sinI*abs(sinvarphi*cosphi)*x)
+                        w = -vt*cosI/(vr_v*sinvartheta*sinphi*cosI-vt_v*cosvartheta*cosI+sinI*abs(sinvartheta*cosphi)*x)
 
-                        w1 = w*cosvarphi
-                        w2 = w*sinvarphi*cosphi
-                        w3 = w*sinvarphi*sinphi
+                        w1 = w*cosvartheta
+                        w2 = w*sinvartheta*cosphi
+                        w3 = w*sinvartheta*sinphi
 
                         Ep = E + 0.5*w^2 - v*w1
 
@@ -220,10 +220,10 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
 
                         Ftot = _F(Ep,Lp)
 
-                        den = vr_v*sinvarphi*sinphi*cosI - vt_v*cosvarphi*cosI+x*sinI*abs(sinvarphi*cosphi)
+                        den = vr_v*sinvartheta*sinphi*cosI - vt_v*cosvartheta*cosI+x*sinI*abs(sinvartheta*cosphi)
 
-                        num1 = vt*coszeta*sinzeta^2*abs(cosphi*sinvarphi)*cosI^2*sinI
-                        num2 = coszeta^2*(vt-vt_v*w*cosvarphi+vr_v*w*sinphi*sinvarphi)
+                        num1 = vt*coszeta*sinzeta^2*abs(cosphi*sinvartheta)*cosI^2*sinI
+                        num2 = coszeta^2*(vt-vt_v*w*cosvartheta+vr_v*w*sinphi*sinvartheta)
 
                         drift_zeta += Ftot/den * (num1/den^2 + num2/den)*(zetamax-zetamin)/nbzeta
                     end
@@ -261,11 +261,11 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
                         zeta = zetamin + (zetamax-zetamin)/nbzeta*(izeta-0.5)
                         sinzeta, coszeta = sincos(zeta)
                         x = cos(zeta)
-                        w = -vt*cosI/(vr_v*sinvarphi*sinphi*cosI-vt_v*cosvarphi*cosI+sinI*abs(sinvarphi*cosphi)*x)
+                        w = -vt*cosI/(vr_v*sinvartheta*sinphi*cosI-vt_v*cosvartheta*cosI+sinI*abs(sinvartheta*cosphi)*x)
 
-                        w1 = w*cosvarphi
-                        w2 = w*sinvarphi*cosphi
-                        w3 = w*sinvarphi*sinphi
+                        w1 = w*cosvartheta
+                        w2 = w*sinvartheta*cosphi
+                        w3 = w*sinvartheta*sinphi
 
                         Ep = E + 0.5*w^2 - v*w1
 
@@ -277,10 +277,10 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
 
                         Ftot = _F(Ep,Lp)
 
-                        den = vr_v*sinvarphi*sinphi*cosI - vt_v*cosvarphi*cosI+x*sinI*abs(sinvarphi*cosphi)
+                        den = vr_v*sinvartheta*sinphi*cosI - vt_v*cosvartheta*cosI+x*sinI*abs(sinvartheta*cosphi)
 
-                        num1 = vt*coszeta*sinzeta^2*abs(cosphi*sinvarphi)*cosI^2*sinI
-                        num2 = coszeta^2*(vt-vt_v*w*cosvarphi+vr_v*w*sinphi*sinvarphi)
+                        num1 = vt*coszeta*sinzeta^2*abs(cosphi*sinvartheta)*cosI^2*sinI
+                        num2 = coszeta^2*(vt-vt_v*w*cosvartheta+vr_v*w*sinphi*sinvartheta)
 
                         drift_zeta += Ftot/den * (num1/den^2 + num2/den)*(zetamax-zetamin)/nbzeta
 
@@ -294,10 +294,10 @@ function localDriftCosIAngleAverage(r::Float64, vr::Float64,
 
         end
 
-        drift += drift_phi*sinvarphi*(1.0+cosvarphi^2)
+        drift += drift_phi*sinvartheta*(1.0+cosvartheta^2)
     end
 
-    pref = 2.0*pi^2/(nbvarphi*nbphi)
+    pref = 2.0*pi^2/(nbvartheta*nbphi)
     pref *= 2.0*pi*_G^2*logCoulomb
 
     drift *= 2.0*pref * m_field *(-r*alpha*abs(cosI))/(2.0*L*pi)

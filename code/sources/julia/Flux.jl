@@ -2,7 +2,7 @@
 # Computes the 3D flux in (Jr,L,Lz) space
 function flux3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
-            nbw::Int64=nbw_default, nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default, 
+            nbw::Int64=nbw_default, nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default, 
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
 
     # F_i = D_i Frot - 0.5 * d/dJk [D_ik Frot]
@@ -25,7 +25,7 @@ function flux3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
     E_Jrm_Lp = E_from_Jr_L(Jr_m,L_p,nbu)
     E_Jrm_Lm = E_from_Jr_L(Jr_m,L_m,nbu)
 
-    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffs(Jr,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffs(Jr,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
 
 
     Frot = _Frot(E,L,Lz,alpha)
@@ -33,19 +33,19 @@ function flux3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
 
     # Partial derivatives
 
-    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffs(Jr_p,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffs(Jr_p,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Jrp = _Frot(E_Jrp,L,Lz,alpha)
-    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffs(Jr_m,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffs(Jr_m,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Jrm = _Frot(E_Jrm,L,Lz,alpha)
 
-    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffs(Jr,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffs(Jr,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lp = _Frot(E_Lp,L_p,Lz,alpha)
-    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffs(Jr,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffs(Jr,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lm = _Frot(E_Lm,L_m,Lz,alpha)
 
-    dJr_Lzp, dL_Lzp, dLz_Lzp, dJrJr_Lzp, dLL_Lzp, dLzLz_Lzp, dJrL_Lzp, dJrLz_Lzp, dLLz_Lzp = orbitAverageActionCoeffs(Jr,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lzp, dL_Lzp, dLz_Lzp, dJrJr_Lzp, dLL_Lzp, dLzLz_Lzp, dJrL_Lzp, dJrLz_Lzp, dLLz_Lzp = orbitAverageActionCoeffs(Jr,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lzp = _Frot(E,L,Lz_p,alpha)
-    dJr_Lzm, dL_Lzm, dLz_Lzm, dJrJr_Lzm, dLL_Lzm, dLzLz_Lzm, dJrL_Lzm, dJrLz_Lzm, dLLz_Lzm = orbitAverageActionCoeffs(Jr,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lzm, dL_Lzm, dLz_Lzm, dJrJr_Lzm, dLL_Lzm, dLzLz_Lzm, dJrL_Lzm, dJrLz_Lzm, dLLz_Lzm = orbitAverageActionCoeffs(Jr,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lzm =_Frot(E,L,Lz_m,alpha)
 
 
@@ -87,7 +87,7 @@ end
 function flux2D_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
-            nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+            nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
 
     # F_i = D_i Frot - 0.5 * d/dJk [D_ik Frot]
@@ -110,7 +110,7 @@ function flux2D_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
     E_Jrm_Lp = E_from_Jr_L(Jr_m,L_p,nbu)
     E_Jrm_Lm = E_from_Jr_L(Jr_m,L_m,nbu)
 
-    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffs(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffs(Jr,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
 
 
     Frot = _Frot_cosI(E,L,cosI,alpha)
@@ -118,14 +118,14 @@ function flux2D_JrL(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
 
     # Partial derivatives
 
-    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffs(Jr_p,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffs(Jr_p,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Jrp = _Frot_cosI(E_Jrp,L,cosI,alpha)
-    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffs(Jr_m,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffs(Jr_m,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Jrm = _Frot_cosI(E_Jrm,L,cosI,alpha)
 
-    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffs(Jr,L_p,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffs(Jr,L_p,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lp = _Frot_cosI(E_Lp,L_p,cosI,alpha)
-    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffs(Jr,L_m,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffs(Jr,L_m,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lm = _Frot_cosI(E_Lm,L_m,cosI,alpha)
 
     # Jr-component
@@ -153,7 +153,7 @@ end
 function dFdt2D_JrL(Jr::Float64, L::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbCosI::Int64=50, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
-            nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+            nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
 
     sumJr = 0.0
@@ -162,13 +162,13 @@ function dFdt2D_JrL(Jr::Float64, L::Float64, m_field::Float64,
     for i=1:nbCosI
         cosI = -1.0 + 2.0/nbCosI*(i-0.5)
 
-        fJr_p, _ = flux2D_JrL(Jr+eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
-        fJr_m, _ = flux2D_JrL(Jr-eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
+        fJr_p, _ = flux2D_JrL(Jr+eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
+        fJr_m, _ = flux2D_JrL(Jr-eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
 
         dJr = (fJr_p-fJr_m)/(2.0*eps)
 
-        _, fL_p  = flux2D_JrL(Jr,L+eps,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
-        _, fL_m  = flux2D_JrL(Jr,L-eps,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
+        _, fL_p  = flux2D_JrL(Jr,L+eps,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
+        _, fL_m  = flux2D_JrL(Jr,L-eps,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
 
         dL = (fL_p-fL_m)/(2.0*eps)
 
@@ -186,7 +186,7 @@ end
 function dFdt2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbL::Int64=50, Lmax::Float64=3.0, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
-            nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+            nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
 
     sumJr = 0.0
@@ -197,13 +197,13 @@ function dFdt2D_JrcosI(Jr::Float64, cosI::Float64, m_field::Float64,
 
         
 
-        fJr_p, _ = flux2D_JrL(Jr+eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
-        fJr_m, _ = flux2D_JrL(Jr-eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
+        fJr_p, _ = flux2D_JrL(Jr+eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
+        fJr_m, _ = flux2D_JrL(Jr-eps,L,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
 
         dJr = (fJr_p-fJr_m)/(2.0*eps)
 
-        fcosI_p  = FluxCosI(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
-        fcosI_m  = FluxCosI(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+        fcosI_p  = FluxCosI(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
+        fcosI_m  = FluxCosI(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
 
 
         dcosI = (fcosI_p-fcosI_m)/(2.0*eps)
@@ -223,7 +223,7 @@ end
 function dFdt2D_LcosI(L::Float64, cosI::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbJr::Int64=50, Jrmax::Float64=3.0, nbAvr::Int64=nbAvr_default,
             nbw::Int64=nbw_default,
-            nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+            nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
 
     sumL = 0.0
@@ -232,13 +232,13 @@ function dFdt2D_LcosI(L::Float64, cosI::Float64, m_field::Float64,
     for i=1:nbJr
         Jr = Jrmax/nbJr*(i-0.5)
 
-        _ , fL_p = flux2D_JrL(Jr,L+eps,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
-        _ , fL_m = flux2D_JrL(Jr,L-eps,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,eps,m_test)
+        _ , fL_p = flux2D_JrL(Jr,L+eps,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
+        _ , fL_m = flux2D_JrL(Jr,L-eps,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,eps,m_test)
 
         dL = (fL_p-fL_m)/(2.0*eps)
 
-        fcosI_p  = FluxCosI(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
-        fcosI_m  = FluxCosI(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+        fcosI_p  = FluxCosI(Jr,L,cosI+eps,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
+        fcosI_m  = FluxCosI(Jr,L,cosI-eps,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
 
 
         dcosI = (fcosI_p-fcosI_m)/(2.0*eps)
@@ -258,7 +258,7 @@ end
 function orbitAverageDriftCosI(sp::Float64, sa::Float64, cosI::Float64,
     m_field::Float64, alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
     nbw::Int64=nbw_default,
-    nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+    nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
     m_test::Float64=m_field)
 
 drift = 0.0
@@ -282,7 +282,7 @@ vt = L/rloc
 
 halfperiod += jac_loc
 
-driftloc = localDriftCosIAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvarphi,nbphi,m_test)
+driftloc = localDriftCosIAngleAverage(rloc,vr,vt,cosI,m_field,alpha,nbw,nbvartheta,nbphi,m_test)
 
 drift += jac_loc*driftloc
 
@@ -299,7 +299,7 @@ end
 function FluxCosI(Jr::Float64, L::Float64, cosI::Float64, m_field::Float64,
     alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
     nbw::Int64=nbw_default,
-    nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+    nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
     nbu::Int64=nbu0, m_test::Float64=m_field)
 
 E = E_from_Jr_L(Jr,L,nbu)
@@ -312,7 +312,7 @@ end
 sma, ecc = sma_ecc_from_sp_sa(sp,sa)
 
 
-drift = orbitAverageDriftCosI(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,m_test)
+drift = orbitAverageDriftCosI(sp,sa,cosI,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,m_test)
 
 Frot = _Frot_cosI(E,L,cosI,alpha)
 
@@ -327,7 +327,7 @@ end
 # Computes the 3D-diffusion rate dF/dt in (Jr,L,Lz) space
 function dFdt3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
             alpha::Float64=alphaRot, nbAvr::Int64=nbAvr_default,
-            nbw::Int64=nbw_default, nbvarphi::Int64=nbvarphi_default, nbphi::Int64=nbphi_default,
+            nbw::Int64=nbw_default, nbvartheta::Int64=nbvartheta_default, nbphi::Int64=nbphi_default,
             nbu::Int64=nbu0, eps::Float64=10^(-5), m_test::Float64=m_field)
 
     Jr_p = Jr + eps*_L0
@@ -350,24 +350,24 @@ function dFdt3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
 
     # Value at point
 
-    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffs(Jr,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr, dL, dLz, dJrJr, dLL, dLzLz, dJrL, dJrLz, dLLz = orbitAverageActionCoeffs(Jr,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot= _Frot(E,L,Lz,alpha)
 
     # Partial derivatives
 
-    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffs(Jr_p,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrp, dL_Jrp, dLz_Jrp, dJrJr_Jrp, dLL_Jrp, dLzLz_Jrp, dJrL_Jrp, dJrLz_Jrp, dLLz_Jrp = orbitAverageActionCoeffs(Jr_p,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Jrp = _Frot(E_Jrp,L,Lz,alpha)
-    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffs(Jr_m,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Jrm, dL_Jrm, dLz_Jrm, dJrJr_Jrm, dLL_Jrm, dLzLz_Jrm, dJrL_Jrm, dJrLz_Jrm, dLLz_Jrm = orbitAverageActionCoeffs(Jr_m,L,Lz/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Jrm = _Frot(E_Jrm,L,Lz,alpha)
 
-    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffs(Jr,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lp, dL_Lp, dLz_Lp, dJrJr_Lp, dLL_Lp, dLzLz_Lp, dJrL_Lp, dJrLz_Lp, dLLz_Lp = orbitAverageActionCoeffs(Jr,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lp = _Frot(E_Lp,L_p,Lz,alpha)
-    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffs(Jr,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lm, dL_Lm, dLz_Lm, dJrJr_Lm, dLL_Lm, dLzLz_Lm, dJrL_Lm, dJrLz_Lm, dLLz_Lm = orbitAverageActionCoeffs(Jr,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lm = _Frot(E_Lm,L_m,Lz,alpha)
 
-    dJr_Lzp, dL_Lzp, dLz_Lzp, dJrJr_Lzp, dLL_Lzp, dLzLz_Lzp, dJrL_Lzp, dJrLz_Lzp, dLLz_Lzp = orbitAverageActionCoeffs(Jr,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lzp, dL_Lzp, dLz_Lzp, dJrJr_Lzp, dLL_Lzp, dLzLz_Lzp, dJrL_Lzp, dJrLz_Lzp, dLLz_Lzp = orbitAverageActionCoeffs(Jr,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lzp = _Frot(E,L,Lz_p,alpha)
-    dJr_Lzm, dL_Lzm, dLz_Lzm, dJrJr_Lzm, dLL_Lzm, dLzLz_Lzm, dJrL_Lzm, dJrLz_Lzm, dLLz_Lzm = orbitAverageActionCoeffs(Jr,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_Lzm, dL_Lzm, dLz_Lzm, dJrJr_Lzm, dLL_Lzm, dLzLz_Lzm, dJrL_Lzm, dJrLz_Lzm, dLLz_Lzm = orbitAverageActionCoeffs(Jr,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_Lzm = _Frot(E,L,Lz_m,alpha)
 
 
@@ -385,34 +385,34 @@ function dFdt3D(Jr::Float64, L::Float64, Lz::Float64, m_field::Float64,
 
     # Mixed derivatives
 
-    dJr_JrpLp, dL_JrpLp, dLz_JrpLp, dJrJr_JrpLp, dLL_JrpLp, dLzLz_JrpLp, dJrL_JrpLp, dJrLz_JrpLp, dLLz_JrpLp = orbitAverageActionCoeffs(Jr_p,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrpLp, dL_JrpLp, dLz_JrpLp, dJrJr_JrpLp, dLL_JrpLp, dLzLz_JrpLp, dJrL_JrpLp, dJrLz_JrpLp, dLLz_JrpLp = orbitAverageActionCoeffs(Jr_p,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrpLp = _Frot(E_Jrp_Lp,L_p,Lz,alpha)
-    dJr_JrmLm, dL_JrmLm, dLz_JrmLm, dJrJr_JrmLm, dLL_JrmLm, dLzLz_JrmLm, dJrL_JrmLm, dJrLz_JrmLm, dLLz_JrmLm = orbitAverageActionCoeffs(Jr_m,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrmLm, dL_JrmLm, dLz_JrmLm, dJrJr_JrmLm, dLL_JrmLm, dLzLz_JrmLm, dJrL_JrmLm, dJrLz_JrmLm, dLLz_JrmLm = orbitAverageActionCoeffs(Jr_m,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrmLm = _Frot(E_Jrm_Lm,L_m,Lz,alpha)
 
-    dJr_JrpLm, dL_JrpLm, dLz_JrpLm, dJrJr_JrpLm, dLL_JrpLm, dLzLz_JrpLm, dJrL_JrpLm, dJrLz_JrpLm, dLLz_JrpLm = orbitAverageActionCoeffs(Jr_p,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrpLm, dL_JrpLm, dLz_JrpLm, dJrJr_JrpLm, dLL_JrpLm, dLzLz_JrpLm, dJrL_JrpLm, dJrLz_JrpLm, dLLz_JrpLm = orbitAverageActionCoeffs(Jr_p,L_m,Lz/L_m,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrpLm = _Frot(E_Jrp_Lm,L_m,Lz,alpha)
-    dJr_JrmLp, dL_JrmLp, dLz_JrmLp, dJrJr_JrmLp, dLL_JrmLp, dLzLz_JrmLp, dJrL_JrmLp, dJrLz_JrmLp, dLLz_JrmLp = orbitAverageActionCoeffs(Jr_m,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrmLp, dL_JrmLp, dLz_JrmLp, dJrJr_JrmLp, dLL_JrmLp, dLzLz_JrmLp, dJrL_JrmLp, dJrLz_JrmLp, dLLz_JrmLp = orbitAverageActionCoeffs(Jr_m,L_p,Lz/L_p,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrmLp = _Frot(E_Jrm_Lp,L_p,Lz,alpha)
 
-    dJr_JrpLzp, dL_JrpLzp, dLz_JrpLzp, dJrJr_JrpLzp, dLL_JrpLzp, dLzLz_JrpLzp, dJrL_JrpLzp, dJrLz_JrpLzp, dLLz_JrpLzp = orbitAverageActionCoeffs(Jr_p,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrpLzp, dL_JrpLzp, dLz_JrpLzp, dJrJr_JrpLzp, dLL_JrpLzp, dLzLz_JrpLzp, dJrL_JrpLzp, dJrLz_JrpLzp, dLLz_JrpLzp = orbitAverageActionCoeffs(Jr_p,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrpLzp = _Frot(E_Jrp,L,Lz_p,alpha)
-    dJr_JrmLzm, dL_JrmLzm, dLz_JrmLzm, dJrJr_JrmLzm, dLL_JrmLzm, dLzLz_JrmLzm, dJrL_JrmLzm, dJrLz_JrmLzm, dLLz_JrmLzm = orbitAverageActionCoeffs(Jr_m,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrmLzm, dL_JrmLzm, dLz_JrmLzm, dJrJr_JrmLzm, dLL_JrmLzm, dLzLz_JrmLzm, dJrL_JrmLzm, dJrLz_JrmLzm, dLLz_JrmLzm = orbitAverageActionCoeffs(Jr_m,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrmLzm = _Frot(E_Jrm,L,Lz_m,alpha)
 
-    dJr_JrpLzm, dL_JrpLzm, dLz_JrpLzm, dJrJr_JrpLzm, dLL_JrpLzm, dLzLz_JrpLzm, dJrL_JrpLzm, dJrLz_JrpLzm, dLLz_JrpLzm = orbitAverageActionCoeffs(Jr_p,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrpLzm, dL_JrpLzm, dLz_JrpLzm, dJrJr_JrpLzm, dLL_JrpLzm, dLzLz_JrpLzm, dJrL_JrpLzm, dJrLz_JrpLzm, dLLz_JrpLzm = orbitAverageActionCoeffs(Jr_p,L,Lz_m/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrpLzm = _Frot(E_Jrp,L,Lz_m,alpha)
-    dJr_JrmLzp, dL_JrmLzp, dLz_JrmLzp, dJrJr_JrmLzp, dLL_JrmLzp, dLzLz_JrmLzp, dJrL_JrmLzp, dJrLz_JrmLzp, dLLz_JrmLzp = orbitAverageActionCoeffs(Jr_m,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_JrmLzp, dL_JrmLzp, dLz_JrmLzp, dJrJr_JrmLzp, dLL_JrmLzp, dLzLz_JrmLzp, dJrL_JrmLzp, dJrLz_JrmLzp, dLLz_JrmLzp = orbitAverageActionCoeffs(Jr_m,L,Lz_p/L,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_JrmLzp = _Frot(E_Jrm,L,Lz_p,alpha)
 
-    dJr_LpLzp, dL_LpLzp, dLz_LpLzp, dJrJr_LpLzp, dLL_LpLzp, dLzLz_LpLzp, dJrL_LpLzp, dJrLz_LpLzp, dLLz_LpLzp = orbitAverageActionCoeffs(Jr,L_p,Lz_p/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_LpLzp, dL_LpLzp, dLz_LpLzp, dJrJr_LpLzp, dLL_LpLzp, dLzLz_LpLzp, dJrL_LpLzp, dJrLz_LpLzp, dLLz_LpLzp = orbitAverageActionCoeffs(Jr,L_p,Lz_p/L_p,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_LpLzp = _Frot(E_Lp,L_p,Lz_p,alpha)
-    dJr_LmLzm, dL_LmLzm, dLz_LmLzm, dJrJr_LmLzm, dLL_LmLzm, dLzLz_LmLzm, dJrL_LmLzm, dJrLz_LmLzm, dLLz_LmLzm = orbitAverageActionCoeffs(Jr,L_m,Lz_m/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_LmLzm, dL_LmLzm, dLz_LmLzm, dJrJr_LmLzm, dLL_LmLzm, dLzLz_LmLzm, dJrL_LmLzm, dJrLz_LmLzm, dLLz_LmLzm = orbitAverageActionCoeffs(Jr,L_m,Lz_m/L_m,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_LmLzm = _Frot(E_Lm,L_m,Lz_m,alpha)
 
-    dJr_LpLzm, dL_LpLzm, dLz_LpLzm, dJrJr_LpLzm, dLL_LpLzm, dLzLz_LpLzm, dJrL_LpLzm, dJrLz_LpLzm, dLLz_LpLzm = orbitAverageActionCoeffs(Jr,L_p,Lz_m/L_p,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_LpLzm, dL_LpLzm, dLz_LpLzm, dJrJr_LpLzm, dLL_LpLzm, dLzLz_LpLzm, dJrL_LpLzm, dJrLz_LpLzm, dLLz_LpLzm = orbitAverageActionCoeffs(Jr,L_p,Lz_m/L_p,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_LpLzm = _Frot(E_Lp,L_p,Lz_m,alpha)
-    dJr_LmLzp, dL_LmLzp, dLz_LmLzp, dJrJr_LmLzp, dLL_LmLzp, dLzLz_LmLzp, dJrL_LmLzp, dJrLz_LmLzp, dLLz_LmLzp = orbitAverageActionCoeffs(Jr,L_m,Lz_p/L_m,m_field,alpha,nbAvr,nbw,nbvarphi,nbphi,nbu,m_test)
+    dJr_LmLzp, dL_LmLzp, dLz_LmLzp, dJrJr_LmLzp, dLL_LmLzp, dLzLz_LmLzp, dJrL_LmLzp, dJrLz_LmLzp, dLLz_LmLzp = orbitAverageActionCoeffs(Jr,L_m,Lz_p/L_m,m_field,alpha,nbAvr,nbw,nbvartheta,nbphi,nbu,m_test)
     Frot_LmLzp =_Frot(E_Lm,L_m,Lz_p,alpha)
 
 

@@ -70,7 +70,7 @@ One may also be interested in samlping the $(J_{\mathrm{r}},\cos I)$ space. To t
 
 ```
 $ cd ./code/compute
-$ julia -t 12 Compute_dFdt_JrCosI.jl --q 0.0 --a 0.1 --nbw 20 --nbphi 200 --nbvarphi 50
+$ julia -t 12 Compute_dFdt_JrCosI.jl --q 0.0 --a 0.1 --nbw 20 --nbphi 200 --nbvartheta 50
 ```
 
 The resulting file will be created in the folder `code/data` under the name 
