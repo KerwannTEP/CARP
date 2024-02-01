@@ -9,7 +9,7 @@ The parametrization of velocity anisotropy follows [Dejonghe (1987)](https://ui.
 
 The parametrization rotation follows the Lynden-Bell demon from [Lynden-Bell (1960)](https://ui.adsabs.harvard.edu/abs/1960MNRAS.120..204L/abstract), and described by
 
-$$F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z}) = F_{\mathrm{tot}}(J_{\mathrm{r}},L) \big(1 + \alpha \, \mathrm{sgn}[L_{\mathrm{z}}/L] \big),$$
+$$F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z}) = F_{\mathrm{tot}}(J_{\mathrm{r}},L) \big(1 + \alpha \ \mathrm{sgn}[L_{\mathrm{z}}/L] \big),$$
 
 where $F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z})$ is the distribution function in action space for the rotating cluster, $F_{\mathrm{tot}}(J_{\mathrm{r}},L)$ is the distribution function for the associated non-rotating cluster and $\alpha$ is the rotation parameter (between -1 and 1).
 
