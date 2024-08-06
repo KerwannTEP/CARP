@@ -15,6 +15,8 @@ where $F_{\mathrm{rot}}(J_{\mathrm{r}},L,L_{z})$ is the distribution function in
 
 This repository makes use of the Julia Language  (see [Bezanson et al. (2017)](https://doi.org/10.1137/141000671)), whose repository is located at [JuliaLang](https://github.com/JuliaLang/julia/tree/master).
 
+A GPU-accelerated version of this code, making use of the `CUDA.jl` library, is available at the repository [CARP_GPU](https://github.com/KerwannTEP/CARP_GPU).
+
 ## Installation
 
 Install Julia by following the instructions at [julialang.org/downloads/](https://julialang.org/downloads/).
